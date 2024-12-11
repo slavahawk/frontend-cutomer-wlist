@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  vue-builder:
+  vue-build-customer:
     image: node:lts
-    container_name: vue-builder
+    container_name: vue-build-customer
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app # Монтируем текущую директорию в контейнер
