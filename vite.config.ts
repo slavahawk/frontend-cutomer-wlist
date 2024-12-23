@@ -18,33 +18,22 @@ export default defineConfig({
       resolvers: [PrimeVueResolver()],
     }),
     VitePWA({
-      registerType: "prompt",
-      injectRegister: false,
-
-      pwaAssets: {
-        disabled: false,
-        config: true,
-      },
-
       manifest: {
-        name: "my-vue-app",
-        short_name: "my-vue-app",
-        description: "my-vue-app",
+        name: "My PWA App",
+        short_name: "PWA",
+        icons: [
+          {
+            src: "icon.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
+        start_url: "/",
+        display: "standalone",
         theme_color: "#ffffff",
+        background_color: "#ffffff",
       },
-
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
-        cleanupOutdatedCaches: true,
-        clientsClaim: true,
-      },
-
-      devOptions: {
-        enabled: false,
-        navigateFallback: "index.html",
-        suppressWarnings: true,
-        type: "module",
-      },
+      registerType: "autoUpdate",
     }),
   ],
   resolve: {
