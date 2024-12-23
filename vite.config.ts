@@ -1,24 +1,24 @@
-import {fileURLToPath, URL} from 'node:url'
-import {defineConfig} from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
-import {PrimeVueResolver} from '@primevue/auto-import-resolver';
-import Components from 'unplugin-vue-components/vite';
-import {VitePWA} from "vite-plugin-pwa";
+import { fileURLToPath, URL } from "node:url";
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import vueDevTools from "vite-plugin-vue-devtools";
+import { PrimeVueResolver } from "@primevue/auto-import-resolver";
+import Components from "unplugin-vue-components/vite";
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vite.dev/config/
 export default defineConfig({
   optimizeDeps: {
-    noDiscovery: true
+    noDiscovery: true,
   },
   plugins: [
     vue(),
     vueDevTools(),
     Components({
-      resolvers: [PrimeVueResolver()]
+      resolvers: [PrimeVueResolver()],
     }),
     VitePWA({
-      registerType: 'prompt',
+      registerType: "prompt",
       injectRegister: false,
 
       pwaAssets: {
@@ -27,34 +27,44 @@ export default defineConfig({
       },
 
       manifest: {
-        name: 'my-vue-app',
-        short_name: 'my-vue-app',
-        description: 'my-vue-app',
-        theme_color: '#ffffff',
+        name: "my-vue-app",
+        short_name: "my-vue-app",
+        description: "my-vue-app",
+        theme_color: "#ffffff",
       },
 
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+        globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
       },
 
       devOptions: {
         enabled: false,
-        navigateFallback: 'index.html',
+        navigateFallback: "index.html",
         suppressWarnings: true,
-        type: 'module',
+        type: "module",
       },
-    })
+    }),
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-})
-
-
-
-
-
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return "vendor"; // Все зависимости из node_modules будут в чанке vendor
+          }
+          if (id.includes("src/components")) {
+            return "components"; // Все компоненты в отдельный чанк
+          }
+        },
+      },
+    },
+  },
+});
