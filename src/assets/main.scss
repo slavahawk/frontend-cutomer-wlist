@@ -1,0 +1,10 @@
+@use '@/assets/layout/layout';
+@use 'primeicons/primeicons.css';
+
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 24px;
+}
