@@ -5,25 +5,32 @@ import { handleError } from "@/helper/handleError";
 import { checkData } from "@/helper/checkData";
 import type { Wine } from "@/types/wine";
 import { WineService } from "@/service/WineService";
+import {
+  addWinesToDb,
+  getWinesFromDb,
+  deleteAllWinesFromDb,
+  getDatabaseSize,
+} from "@/db";
 
 export const useWineStore = defineStore("wines", () => {
   const wines = ref<Wine[]>([]);
   const isLoad = ref(false);
   const toast = useToast();
 
-  const setData = (data: Wine[]) => {
-    wines.value = data;
-    localStorage.setItem("wines", JSON.stringify(data));
-  };
-  const loadData = () => {
-    const savedData = localStorage.getItem("wines");
-    if (savedData) {
-      wines.value = JSON.parse(savedData); // Загружаем данные из Local Storage
+  const loadData = async () => {
+    const data = await getWinesFromDb();
+    console.log(data);
+    if (data) {
+      wines.value = data;
+
+      const size = await getDatabaseSize();
+      let sizeInMB = size / (1024 * 1024); // перевод в МБ
+      console.log("sizeDB: ", sizeInMB.toFixed(2) + " МБ"); // вывод с 2 знаками после запятой
     }
   };
   const clearData = () => {
     wines.value = [];
-    localStorage.removeItem("wines"); // Очищаем данные из Local Storage
+    deleteAllWinesFromDb();
   };
 
   loadData();
@@ -40,7 +47,8 @@ export const useWineStore = defineStore("wines", () => {
         summary: "Вина получены",
         life: 3000,
       });
-      setData(data);
+      wines.value = data;
+      await addWinesToDb(data);
       return data;
     } catch (error) {
       handleError(error, toast);
