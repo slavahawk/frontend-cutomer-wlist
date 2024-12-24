@@ -2,6 +2,7 @@
   "name": "customer-wlist",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "run-p type-check \"build-only {@}\" --",
     "build-only": "vite build",
@@ -13,10 +14,10 @@
     "@primevue/auto-import-resolver": "^4.2.4",
     "@primevue/forms": "^4.2.4",
     "@primevue/themes": "^4.2.4",
-    "@vite-pwa/assets-generator": "^0.2.6",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
+    "idb": "^8.0.1",
     "pinia": "^2.2.6",
     "postcss": "^8.4.49",
     "primeicons": "^7.0.0",
@@ -43,6 +44,5 @@
     "vite": "^6.0.1",
     "vite-plugin-vue-devtools": "^7.6.5",
     "vue-tsc": "^2.1.10"
-  },
-  "type": "module"
+  }
 }

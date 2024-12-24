@@ -1,11 +1,11 @@
 <template>
   <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white">
     <img
-        class="w-full h-48 object-cover"
-        :src="wine.originalImagePath"
-        alt="Wine Image"
+      class="w-full h-48 object-cover"
+      :src="wine.originalImagePath"
+      alt="Wine Image"
     />
-    {{wine.originalImagePath}}
+    {{ wine.originalImagePath }}
     <div class="px-6 py-4">
       <div class="font-bold text-xl mb-2">{{ wine.name }}</div>
       <p class="text-gray-700 text-base">
@@ -20,27 +20,30 @@
     <div class="px-6 py-4">
       <div class="flex items-center">
         <img
-            class="w-6 h-6 mr-2"
-            :src="wine.country.originalImagePath"
-            alt="Country Image"
+          class="w-6 h-6 mr-2"
+          :src="wine.country.originalImagePath"
+          alt="Country Image"
         />
         <span class="text-gray-700">{{ wine.country.name }}</span>
       </div>
-      <p class="text-gray-600 mt-2"><strong>Интересные факты:</strong> {{ wine.interestingFacts }}</p>
-      <p class="text-gray-600 mt-2"><strong>Органолептические свойства:</strong> {{ wine.organoleptic }}</p>
+      <p class="text-gray-600 mt-2">
+        <strong>Интересные факты:</strong> {{ wine.interestingFacts }}
+      </p>
+      <p class="text-gray-600 mt-2">
+        <strong>Органолептические свойства:</strong> {{ wine.organoleptic }}
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {computed, ref, defineProps} from "vue";
+import { computed } from "vue";
 
-import type {Wine} from "@/types/wine";
-
+import type { Wine } from "@/types/wine";
 
 const props = defineProps<{
-  wine: Wine
-}>()
+  wine: Wine;
+}>();
 
 // const wine = ref({
 //   id: 1,
@@ -62,7 +65,7 @@ const props = defineProps<{
 // });
 
 const roundedAlcohol = computed(() => {
-  return Number(Math.round(props.wine.alcoholByVolume + 'e' + 2) + 'e-' + 2);
+  return Number(Math.round(props.wine.alcoholByVolume + "e" + 2) + "e-" + 2);
 });
 </script>
 
