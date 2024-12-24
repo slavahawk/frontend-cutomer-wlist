@@ -12,7 +12,10 @@ const { wines, isLoad } = storeToRefs(useWineStore());
     <Button :loading="isLoad" label="Получить вина" @click="getWines" />
     <Button label="Очистить" @click="clearData" />
   </div>
-  <div v-if="wines.length" class="flex justify-space-between flex-wrap gap-2">
+  <div
+    v-if="wines.length"
+    class="grid grid-cols-[repeat(auto-fit,minmax(292px,1fr))] gap-4"
+  >
     <CardWine v-for="wine in wines" :key="wine.id" :wine="wine" />
   </div>
 </template>
