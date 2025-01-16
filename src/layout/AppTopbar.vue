@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useLayout } from "@/layout/composables/layout";
 import AppConfigurator from "./AppConfigurator.vue";
-import { AppRoutes, RoutePath } from "@/router";
+import { RoutePath } from "@/router";
 import { useAuthStore } from "@/stores/authStore.ts";
 import Logo from "@/assets/images/svg/Logo.vue";
 import { storeToRefs } from "pinia";
 
-const {  toggleDarkMode, isDarkTheme } = useLayout();
+const { toggleDarkMode, isDarkTheme } = useLayout();
 const { logout } = useAuthStore();
 const { isLoad } = storeToRefs(useAuthStore());
 </script>
@@ -66,14 +66,14 @@ const { isLoad } = storeToRefs(useAuthStore());
 
       <div class="layout-topbar-menu hidden lg:block">
         <div class="layout-topbar-menu-content">
-          <button
-            type="button"
-            class="layout-topbar-action"
-            @click="$router.push({ name: AppRoutes.COMMON })"
-          >
-            <i class="pi pi-user"></i>
-            <span>Profile</span>
-          </button>
+          <!--          <button-->
+          <!--            type="button"-->
+          <!--            class="layout-topbar-action"-->
+          <!--            @click="$router.push({ name: AppRoutes.COMMON })"-->
+          <!--          >-->
+          <!--            <i class="pi pi-user"></i>-->
+          <!--            <span>Profile</span>-->
+          <!--          </button>-->
           <Button
             :loading="isLoad"
             type="button"

@@ -34,11 +34,10 @@
 </template>
 
 <script setup lang="ts">
-import { useToast } from "primevue/usetoast";
-import { reactive } from "vue";
-import { z } from "zod";
-import { AuthService } from "@/service/AuthService.ts";
-import { handleError } from "@/helper/handleError.ts";
+import {useToast} from "primevue/usetoast";
+import {reactive} from "vue";
+import {z} from "zod";
+import {handleError} from "@/helper/handleError.ts";
 
 const toast = useToast();
 
@@ -77,8 +76,8 @@ const resolver = async ({ values }) => {
 const handleResetSubmit = async ({ valid, states }) => {
   if (valid) {
     try {
-      const data = await AuthService.forgotPassword(states.resetEmail.value);
-      console.log(data);
+      // const data = await AuthService.forgotPassword(states.resetEmail.value);
+      // console.log(data);
       emit("close");
     } catch (e) {
       handleError(e, toast);

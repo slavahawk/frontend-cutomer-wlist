@@ -3,7 +3,7 @@
   <div
     class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden"
   >
-<!--    <img src="https://dummyjson.com/image/150" alt="">-->
+    <!--    <img src="https://dummyjson.com/image/150" alt="">-->
     <div class="flex flex-col items-center justify-center">
       <div
         style="
@@ -94,12 +94,7 @@
               type="submit"
             ></Button>
 
-            <div class="flex items-center justify-between mt-4 mb-8 gap-8">
-              <router-link
-                :to="{ name: AppRoutes.REG }"
-                class="font-medium no-underline text-right cursor-pointer text-primary"
-                >Регистрация</router-link
-              >
+            <div class="flex items-center justify-end mt-4 mb-8">
               <ForgotPasswordDialog />
             </div>
           </Form>
@@ -110,17 +105,20 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
+import { reactive } from "vue";
 import { z } from "zod";
 
 import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
 import { useAuthStore } from "@/stores/authStore.ts";
 import Logo from "@/assets/images/svg/Logo.vue";
-import { AppRoutes } from "@/router";
 import ForgotPasswordDialog from "@/components/ForgotPasswordDialog.vue";
-import {api} from "@/api/api.ts";
+import { ACCESS_TOKEN } from "w-list-api";
 
 const authStore = useAuthStore();
+
+if (localStorage.getItem(ACCESS_TOKEN)) {
+  localStorage.removeItem(ACCESS_TOKEN);
+}
 
 const initialValues = reactive({
   email: "",
@@ -162,7 +160,6 @@ const handleSubmit = async ({ valid, states }) => {
     await authStore.login(states.email.value, states.password.value);
   }
 };
-
 </script>
 
 <style scoped>

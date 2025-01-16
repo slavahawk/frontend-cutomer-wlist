@@ -6,7 +6,9 @@ initializeAuth();
 </script>
 
 <template>
-  <router-view />
+  <Suspense>
+    <router-view />
+  </Suspense>
   <Toast />
   <PWABadge />
 </template>

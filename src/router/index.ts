@@ -5,37 +5,43 @@ import { useAuthStore } from "@/stores/authStore";
 export enum AppRoutes {
   MAIN = "Main",
   LOGIN = "Login",
-  REG = "Reg",
-  COMMON = "Common",
+  TABS = "Tabs",
+  WINES = "Wines",
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.MAIN]: "/",
   [AppRoutes.LOGIN]: "/auth/login",
-  [AppRoutes.REG]: "/auth/reg",
-  [AppRoutes.COMMON]: "/common",
+  [AppRoutes.TABS]: "/tabs",
+  [AppRoutes.WINES]: "/wines",
 };
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
+      path: RoutePath.Main,
+      name: AppRoutes.MAIN,
+      component: () => import("@/views/Main.vue"),
+      meta: { requiresAuth: true },
+    },
+
+    {
       path: "/",
       component: AppLayout,
       children: [
         {
-          path: RoutePath.Main,
-          name: AppRoutes.MAIN,
-          component: () => import("@/views/Dashboard.vue"),
+          path: RoutePath.Tabs,
+          name: AppRoutes.TABS,
+          component: () => import("@/views/TabsView.vue"),
           meta: { requiresAuth: true },
         },
         {
-          path: RoutePath.Common,
-          name: AppRoutes.COMMON,
-          component: () => import("@/views/Common.vue"),
+          path: RoutePath.Wines,
+          name: AppRoutes.WINES,
+          component: () => import("@/views/Wines.vue"),
           meta: { requiresAuth: true },
         },
-
       ],
     },
     {
@@ -48,11 +54,6 @@ const router = createRouter({
       path: RoutePath.Login,
       name: AppRoutes.LOGIN,
       component: () => import("@/views/pages/auth/Login.vue"),
-    },
-    {
-      path: RoutePath.Reg,
-      name: AppRoutes.REG,
-      component: () => import("@/views/pages/auth/Reg.vue"),
     },
     {
       path: "/auth/access",

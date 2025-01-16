@@ -47,7 +47,7 @@
 import { computed } from "vue";
 
 import type { Wine } from "@/types/wine";
-import Logo from "@/assets/images/logo.png";
+import { handleImageError } from "@/utils/handleImageError.ts";
 
 const props = defineProps<{ wine: Wine }>();
 
@@ -55,8 +55,6 @@ const roundedAlcohol = computed(() => {
   const alcoholVolume = props.wine.alcoholByVolume;
   return Number(Math.round(alcoholVolume * 100) / 100);
 });
-
-const handleImageError = (event: any) => (event.target.src = Logo);
 </script>
 
 <style scoped>
