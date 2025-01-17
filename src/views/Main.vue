@@ -1,44 +1,35 @@
 <script setup lang="ts">
 import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
 import { AppRoutes } from "@/router";
+import Logo from "@/assets/images/svg/Logo.vue";
 </script>
 
 <template>
   <FloatingConfigurator class="z-50" />
   <div class="mainBanner">
-    <div class="overlay"></div>
-    <!-- Затемнение -->
-    <Button @click="$router.push({ name: AppRoutes.TABS })" size="large">
-      Винная карта
-    </Button>
+    <div class="mainBanner__content">
+      <Logo />
+
+      <!--      <img src="@/assets/images/main.jpeg" alt="" />-->
+      <Button
+        raised
+        @click="$router.push({ name: AppRoutes.TABS })"
+        class="mt-12"
+        ><span class="text-3xl">Винная карта</span></Button
+      >
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .mainBanner {
   height: 100vh;
-  background-image: url("@/assets/images/main.jpeg");
-  background-size: cover; /* Заполнение */
-  background-position: center; /* Центрирование */
-  position: relative; /* Для абсолютного позиционирования overlay */
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Затемнение */
-    z-index: 10; /* Обеспечивает слой выше фона */
-  }
-
-  button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 20; /* Обеспечьте наличие более высокого z-index для кнопки */
+  &__content {
   }
 }
 </style>

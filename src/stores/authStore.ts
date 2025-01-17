@@ -1,11 +1,11 @@
-import {defineStore} from "pinia";
-import {ref} from "vue";
-import {useToast} from "primevue/usetoast";
-import {useRouter} from "vue-router";
-import {AppRoutes} from "@/router";
-import {ACCESS_TOKEN, AuthService, type Me, REFRESH_TOKEN} from "w-list-api";
-import {handleError} from "@/helper/handleError.ts";
-import {checkData} from "@/helper/checkData.ts";
+import { defineStore } from "pinia";
+import { ref } from "vue";
+import { useToast } from "primevue/usetoast";
+import { useRouter } from "vue-router";
+import { AppRoutes } from "@/router";
+import { ACCESS_TOKEN, AuthService, type Me, REFRESH_TOKEN } from "w-list-api";
+import { handleError } from "@/helper/handleError.ts";
+import { checkData } from "@/helper/checkData.ts";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref<Me | null>(null);
@@ -43,6 +43,20 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  const getMe = async () => {
+    isLoad.value = true;
+    try {
+      const data = await AuthService.me();
+      checkData(data, "User data not found in response");
+      user.value = data;
+      return data;
+    } catch (error) {
+      handleError(error, toast);
+    } finally {
+      isLoad.value = false;
+    }
+  };
+
   const register = async (body: {
     email: string;
     password: string;
@@ -68,7 +82,9 @@ export const useAuthStore = defineStore("auth", () => {
   const logout = async () => {
     isLoad.value = true;
     try {
-      await AuthService.logout({refreshToken: localStorage.getItem(REFRESH_TOKEN)});
+      await AuthService.logout({
+        refreshToken: localStorage.getItem(REFRESH_TOKEN),
+      });
       isAuthenticated.value = false;
       localStorage.removeItem(REFRESH_TOKEN);
       localStorage.removeItem(ACCESS_TOKEN);
@@ -97,5 +113,6 @@ export const useAuthStore = defineStore("auth", () => {
     register,
     logout,
     checkAuth,
+    getMe,
   };
 });

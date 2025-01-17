@@ -1,10 +1,11 @@
 <template>
   <swiper
-      :effect="'cards'"
-      :grabCursor="true"
-      :modules="modules"
-      class="mySwiper"
+    :effect="'cards'"
+    :grabCursor="true"
+    :modules="modules"
+    class="mySwiper"
   >
+    <slot></slot>
     <swiper-slide>Slide 1</swiper-slide>
     <swiper-slide>Slide 2</swiper-slide><swiper-slide>Slide 3</swiper-slide>
     <swiper-slide>Slide 4</swiper-slide><swiper-slide>Slide 5</swiper-slide>
@@ -14,17 +15,15 @@
 </template>
 <script>
 // Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Swiper, SwiperSlide } from "swiper/vue";
 
 // Import Swiper styles
-import 'swiper/css';
+import "swiper/css";
 
-import 'swiper/css/effect-cards';
-
-
+import "swiper/css/effect-cards";
 
 // import required modules
-import { EffectCards } from 'swiper/modules';
+import { EffectCards } from "swiper/modules";
 
 export default {
   components: {
@@ -39,9 +38,7 @@ export default {
 };
 </script>
 
-
-<style lang="scss" scoped>
-
+<style lang="scss">
 .swiper {
   width: 60vw;
   height: 80vh;
@@ -49,7 +46,7 @@ export default {
 
 .swiper-slide {
   display: flex;
-  align-items: center;
+  //align-items: center;
   justify-content: center;
   border-radius: 18px;
   font-size: 22px;
@@ -96,5 +93,4 @@ export default {
 .swiper-slide:nth-child(10n) {
   background-color: rgb(54, 94, 77);
 }
-
 </style>

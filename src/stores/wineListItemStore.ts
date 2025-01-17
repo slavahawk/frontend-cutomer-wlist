@@ -4,6 +4,7 @@ import { ref } from "vue";
 import {
   type CreateWineList,
   type WineListItemResponses,
+  type WineListItemRequest,
   WineListItemService,
 } from "w-list-api";
 
@@ -17,10 +18,13 @@ export const useWineListItemStore = defineStore("wineListItems", () => {
   };
 
   // Fetch all wine list items
-  const fetchWineListItems = async (listId: number) => {
+  const fetchWineListItems = async (
+    listId: number,
+    params: WineListItemRequest,
+  ) => {
     setLoading(true);
     try {
-      wineListItems.value = await WineListItemService.getAll(listId);
+      wineListItems.value = await WineListItemService.getAll(listId, params);
     } catch (error) {
       console.error("Error fetching wine list items:", error);
     } finally {

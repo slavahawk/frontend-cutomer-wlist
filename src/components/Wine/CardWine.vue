@@ -27,11 +27,11 @@
       <div class="flex items-center">
         <img
           class="w-6 h-6 mr-2"
-          :src="wine.country.originalImagePath"
+          :src="wine.country?.originalImagePath"
           alt="Country Image"
           @error="handleImageError"
         />
-        <span>{{ wine.country.name }}</span>
+        <span>{{ wine.country?.name }}</span>
       </div>
       <div class="mt-2">
         <p><strong>Интересные факты:</strong> {{ wine.interestingFacts }}</p>
