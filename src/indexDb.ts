@@ -1,5 +1,5 @@
 import { openDB } from "idb";
-import type { Wine } from "@/types/wine";
+import type { Wine } from "w-list-api";
 
 const dbPromise = openDB("wine-database", 1, {
   upgrade(db) {

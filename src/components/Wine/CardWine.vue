@@ -45,8 +45,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-
-import type { Wine } from "@/types/wine";
+import { type Wine } from "w-list-api";
 import { handleImageError } from "@/utils/handleImageError.ts";
 
 const props = defineProps<{ wine: Wine }>();
