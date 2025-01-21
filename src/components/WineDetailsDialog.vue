@@ -6,6 +6,7 @@
           :price-per-glass="pricePerGlass"
           :price-per-bottle="pricePerBottle"
           :bottle-volume="wine.bottleVolume"
+          :glass-volume="wine?.glassVolume"
         />
       </p>
     </WineDetailCard>

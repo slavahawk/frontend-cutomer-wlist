@@ -11,6 +11,7 @@ import {
 } from "w-list-api";
 import WineDetailsDialog from "@/components/WineDetailsDialog.vue";
 import { vintage } from "../utils/vintage.ts";
+import WinePrice from "@/components/WinePrice.vue";
 
 const { getRegionNameById } = useRegionStore();
 const { getCountryNameById } = useCountryStore();
@@ -83,7 +84,7 @@ const showWineDetails = (data: any) => {
               </Column>
               <Column field="name">
                 <template #body="{ data }">
-                  <div @click="showWineDetails(data)">
+                  <div class="cursor-pointer" @click="showWineDetails(data)">
                     <div>{{ data.wine.name }}</div>
                     <div style="color: var(--primary-color)">
                       {{ getCountryNameById(data.wine.countryId) }},
@@ -92,12 +93,13 @@ const showWineDetails = (data: any) => {
                   </div>
                 </template>
               </Column>
-              <Column field="pricePerGlass" sortable class="w-[300px]">
+              <Column field="pricePerGlass" sortable class="w-[320px]">
                 <template #body="{ data }">
                   <WinePrice
                     :price-per-glass="data.pricePerGlass"
                     :price-per-bottle="data.pricePerBottle"
                     :bottle-volume="data.wine.bottleVolume"
+                    :glass-volume="wine?.glassVolume"
                   />
                 </template>
               </Column>
