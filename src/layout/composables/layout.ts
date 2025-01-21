@@ -7,7 +7,6 @@ const layoutConfig = reactive({
   darkTheme: true,
 });
 
-
 const loadFromLocalStorage = () => {
   const savedConfig = getParsedItem("layoutConfig");
   if (savedConfig) applyConfig(savedConfig);
@@ -35,8 +34,6 @@ const useLayout = () => {
   const saveToLocalStorage = () => {
     localStorage.setItem("layoutConfig", JSON.stringify(layoutConfig));
   };
-
-
 
   const toggleDarkMode = () => {
     layoutConfig.darkTheme = !layoutConfig.darkTheme;

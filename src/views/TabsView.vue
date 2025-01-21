@@ -1,46 +1,50 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useCountryStore } from "@/stores/countryStore.ts";
-import { useGrapeStore } from "@/stores/grapeStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
-import { categoryOptions, colourOptions, sugarTypesOptions } from "w-list-api";
-import { computed, reactive } from "vue";
-import { useWineListItemStore } from "@/stores/wineListItemStore.ts";
+import { computed, ref } from "vue";
+import { useWineListStore } from "@/stores/wineListStore.ts";
+import {
+  getCategoryLabelByValue,
+  getColourLabelByValue,
+  getSugarTypeLabelByValue,
+} from "w-list-api";
+import WineDetailsDialog from "@/components/WineDetailsDialog.vue";
+import { vintage } from "../utils/vintage.ts";
 
-const { countries } = storeToRefs(useCountryStore());
-const { grapes } = storeToRefs(useGrapeStore());
-const { regions } = storeToRefs(useRegionStore());
-const { fetchWineListItems } = useWineListItemStore();
+const { getRegionNameById } = useRegionStore();
+const { getCountryNameById } = useCountryStore();
+const { activeWineList } = storeToRefs(useWineListStore());
+
+const namingFunctions = {
+  Категории: getCategoryLabelByValue,
+  Страны: (key: any) => getCountryNameById(+key),
+  Виноград: (key: any) => key,
+  Регионы: (key: any) => getRegionNameById(+key),
+  "Тип сахара": getSugarTypeLabelByValue,
+  Цвет: getColourLabelByValue,
+};
 
 const tabContent = computed(() => [
-  { title: "Категории", items: categoryOptions },
-  { title: "Страны", items: countries.value },
-  { title: "Виноград", items: grapes.value },
-  { title: "Регионы", items: regions.value },
-  { title: "Тип сахара", items: sugarTypesOptions },
-  { title: "Цвет", items: colourOptions },
-  // { title: "Объем", items: bottleVolumeOptions },
+  { title: "Категории", items: activeWineList.value?.categories },
+  { title: "Страны", items: activeWineList.value?.countries },
+  { title: "Виноград", items: activeWineList.value?.grapes },
+  { title: "Регионы", items: activeWineList.value?.regions },
+  { title: "Тип сахара", items: activeWineList.value?.sugarTypes },
+  { title: "Цвет", items: activeWineList.value?.colours },
 ]);
 
-const params = reactive({
-  page: 0,
-  size: 10,
-  category: undefined,
-  colour: undefined,
-  sugarType: undefined,
-  countryId: undefined,
-  regionId: undefined,
-  grapeId: undefined,
-  vintage: undefined,
-  bottleVolume: undefined,
-});
+const getNamingKey = (key: any, item: any) => {
+  const namingFunction = namingFunctions[item.title];
+  return namingFunction ? namingFunction(key) : key;
+};
 
-const clickCard = (item: any, title: any) => {
-  if (title === "Категории") {
-    params.category = item.value;
-  }
+const showDetails = ref(false);
+const selectWine = ref(null);
 
-  fetchWineListItems(5, params);
+const showWineDetails = (data: any) => {
+  selectWine.value = data;
+  showDetails.value = true;
 };
 </script>
 
@@ -58,17 +62,9 @@ const clickCard = (item: any, title: any) => {
           :key="index"
           :value="index"
         >
-          <div
-            class="mb-12"
-            v-for="item in tab.items"
-            :key="item?.id || item?.value"
-          >
+          <div class="mb-12" v-for="(item, key) in tab.items" :key="key">
             <DataTable
-              :value="[
-                { id: 0, name: 'suck', date: 2022, price: 3200 },
-                { id: 1, name: 'хуяк', date: 2022, price: 3500 },
-                { id: 2, name: 'пиздяк', date: 2022, price: 2400 },
-              ]"
+              :value="item.items"
               tableStyle="min-width: 50rem"
               stripedRows
             >
@@ -77,41 +73,54 @@ const clickCard = (item: any, title: any) => {
                   class="text-2xl font-semibold"
                   style="color: var(--primary-color)"
                 >
-                  {{ item?.name || item?.label }}
+                  {{ getNamingKey(key, tab) }}
                 </div>
               </template>
-              <Column field="date" class="w-14"> </Column>
+              <Column field="vintage" class="w-14">
+                <template #body="{ data }">
+                  {{ vintage(data.wine.vintage) }}</template
+                >
+              </Column>
               <Column field="name">
                 <template #body="{ data }">
-                  {{ data.name }}
-                  <div>Из ебаной испании</div>
+                  <div @click="showWineDetails(data)">
+                    <div>{{ data.wine.name }}</div>
+                    <div style="color: var(--primary-color)">
+                      {{ getCountryNameById(data.wine.countryId) }},
+                      {{ getRegionNameById(data.wine.regionId) }}
+                    </div>
+                  </div>
                 </template>
               </Column>
-              <Column class="w-12" field="price" sortable></Column>
+              <Column field="pricePerGlass" sortable class="w-[300px]">
+                <template #body="{ data }">
+                  <WinePrice
+                    :price-per-glass="data.pricePerGlass"
+                    :price-per-bottle="data.pricePerBottle"
+                    :bottle-volume="data.wine.bottleVolume"
+                  />
+                </template>
+              </Column>
             </DataTable>
           </div>
         </TabPanel>
       </TabPanels>
     </Tabs>
 
-    <!--    <div v-if="wineListItems?.page.totalElements">-->
-    <!--      <SliderComponent>-->
-    <!--        <swiper-slide-->
-    <!--          v-for="w in wineListItems?._embedded.rootWineListItemResponseList"-->
-    <!--          :key="w.id"-->
-    <!--        >-->
-    <!--          <CardWine :wine="w.wine" />-->
-    <!--        </swiper-slide>-->
-    <!--      </SliderComponent>-->
-    <!--    </div>-->
+    <div v-if="selectWine">
+      <WineDetailsDialog
+        v-model:show="showDetails"
+        :wine="selectWine.wine"
+        :price-per-bottle="selectWine.pricePerBottle"
+        :price-per-glass="selectWine.pricePerGlass"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .square {
-  width: 100%; // или 100px или другая фиксированная ширина в зависимости от вашего дизайна
+  width: 100%;
   aspect-ratio: 1;
-  /* или например если нужно абсолютное значение
-     height: calc(100% / 3); // Пример для 3 элементов в ряд, вам может нужно это менять в зависимости от ваших требований */
 }
 </style>

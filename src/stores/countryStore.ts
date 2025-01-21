@@ -4,7 +4,6 @@ import { CountryService, type Country } from "w-list-api";
 
 export const useCountryStore = defineStore("country", () => {
   const countries = ref<Country[]>([]);
-  const selectedCountry = ref<Country | null>(null);
   const loading = ref(false);
   const error = ref<string | null>(null);
 
@@ -14,6 +13,9 @@ export const useCountryStore = defineStore("country", () => {
       label: country.name,
     }));
   });
+
+  const getCountryNameById = (countryId: number): string | null =>
+      countries.value.find((c: Country) => c.id === countryId)?.name ?? null;
 
   const fetchCountries = async () => {
     loading.value = true;
@@ -29,32 +31,13 @@ export const useCountryStore = defineStore("country", () => {
     }
   };
 
-  const fetchCountryById = async (id: number) => {
-    loading.value = true;
-    error.value = null;
-
-    try {
-      selectedCountry.value = await CountryService.getById(id);
-    } catch (err) {
-      error.value = "Ошибка при получении страны. Попробуйте еще раз.";
-      console.error(err);
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  const clearSelectedCountry = () => {
-    selectedCountry.value = null;
-  };
 
   return {
     countries,
-    selectedCountry,
     loading,
     error,
     fetchCountries,
-    fetchCountryById,
-    clearSelectedCountry,
     countriesOptions,
+    getCountryNameById,
   };
 });

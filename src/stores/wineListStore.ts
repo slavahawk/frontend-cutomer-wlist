@@ -3,13 +3,14 @@ import { defineStore } from "pinia";
 import {
   type CreateWineList,
   type WineList,
+    type WineListActive,
   WineListService,
 } from "w-list-api"; // Путь к сервису управления списками вин
 
 export const useWineListStore = defineStore("wineList", () => {
   const wineLists = ref<WineList[]>([]);
   const wineList = ref<WineList | null>(null);
-  const activeWineList = ref<WineList | null>(null);
+  const activeWineList = ref<WineListActive | null>(null);
   const loading = ref(false);
   const error = ref<string | null>(null);
 
@@ -29,21 +30,6 @@ export const useWineListStore = defineStore("wineList", () => {
     }
   };
 
-  const setActiveList = async (id: number) => {
-    loading.value = true;
-    error.value = null;
-
-    try {
-      const data = await WineListService.setActiveList(id);
-      activeWineList.value = data;
-      return data;
-    } catch (err) {
-      error.value = "Ошибка";
-      console.error(err);
-    } finally {
-      loading.value = false;
-    }
-  };
 
   // Функция для получения всех списков вин
   const fetchWineLists = async () => {
@@ -146,7 +132,6 @@ export const useWineListStore = defineStore("wineList", () => {
     createWineList,
     clearSelectedWineList,
     isSelectedWineList,
-    setActiveList,
     getActiveList,
     activeWineList,
   };
