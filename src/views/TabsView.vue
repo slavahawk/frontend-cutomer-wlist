@@ -10,8 +10,8 @@ import {
   getSugarTypeLabelByValue,
 } from "w-list-api";
 import WineDetailsDialog from "@/components/WineDetailsDialog.vue";
-import { vintage } from "../utils/vintage.ts";
-import WinePrice from "@/components/WinePrice.vue";
+import { vintage } from "w-list-utils";
+import { WinePrice } from "w-list-components";
 
 const { getRegionNameById } = useRegionStore();
 const { getCountryNameById } = useCountryStore();
@@ -99,7 +99,7 @@ const showWineDetails = (data: any) => {
                     :price-per-glass="data.pricePerGlass"
                     :price-per-bottle="data.pricePerBottle"
                     :bottle-volume="data.wine.bottleVolume"
-                    :glass-volume="wine?.glassVolume"
+                    :glass-volume="data?.glassVolume"
                   />
                 </template>
               </Column>
@@ -115,6 +115,7 @@ const showWineDetails = (data: any) => {
         :wine="selectWine.wine"
         :price-per-bottle="selectWine.pricePerBottle"
         :price-per-glass="selectWine.pricePerGlass"
+        :glassVolume="selectWine?.glassVolume"
       />
     </div>
   </div>

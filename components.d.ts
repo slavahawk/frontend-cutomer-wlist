@@ -35,9 +35,7 @@ declare module 'vue' {
     TabPanels: typeof import('primevue/tabpanels')['default']
     Tabs: typeof import('primevue/tabs')['default']
     Toast: typeof import('primevue/toast')['default']
-    WineDetailCard: typeof import('./src/components/WineDetailCard.vue')['default']
     WineDetailsDialog: typeof import('./src/components/WineDetailsDialog.vue')['default']
-    WinePrice: typeof import('./src/components/WinePrice.vue')['default']
   }
   export interface ComponentCustomProperties {
     StyleClass: typeof import('primevue/styleclass')['default']
