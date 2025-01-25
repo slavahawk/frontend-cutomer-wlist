@@ -1,5 +1,8 @@
 <template>
-  <div class="bgExampleClass">
+  <div
+    class="bgExampleClass"
+    :style="{ 'background-image': 'url(' + MainBanner + ')' }"
+  >
     <FloatingConfigurator class="z-50" />
     <div class="mainBanner">
       <div class="mainBanner__content">
@@ -14,6 +17,7 @@
 <script setup lang="ts">
 import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
 import { AppRoutes } from "@/router";
+import MainBanner from "@/assets/images/main.jpeg";
 </script>
 
 <style scoped lang="scss">
@@ -36,7 +40,6 @@ import { AppRoutes } from "@/router";
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("./main.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
