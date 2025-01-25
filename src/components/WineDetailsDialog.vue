@@ -9,11 +9,12 @@
           :interesting-facts="wine.wine.interestingFacts"
           :organoleptic="wine.wine.organoleptic"
           :vintage="vintage(wine.wine.vintage)"
+          :grapes="grapesNames[wine.id]"
           :sugar-type="getSugarTypeLabelByValue(wine.wine.sugarType)"
-          :country="getCountryNameById(wine.wine.countryId)"
+          :country="countryNames[wine.wine.countryId]"
           :category="getCategoryLabelByValue(wine.wine.category)"
           :colour="getColourLabelByValue(wine.wine.colour)"
-          :region="getRegionNameById(wine.wine.regionId)"
+          :region="regionNames[wine.wine.regionId]"
         >
           <p class="mb-4">
             <WinePrice
@@ -30,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, watch } from "vue";
+import { computed } from "vue";
 import { WineCard, WinePrice } from "w-list-components";
 import { vintage } from "w-list-utils";
 import {
@@ -38,14 +39,16 @@ import {
   getColourLabelByValue,
   getSugarTypeLabelByValue,
   type WineListItem,
-} from "w-list-api"; // Импортируйте тип Wine, если это необходимо
+} from "w-list-api";
 import { useCountryStore } from "@/stores/countryStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
 import SliderComponent from "@/components/SliderComponent.vue";
 import { SwiperSlide } from "swiper/vue";
+import { useGrapeStore } from "@/stores/grapeStore.ts";
 
 const { getCountryNameById } = useCountryStore();
 const { getRegionNameById } = useRegionStore();
+const { getGrapesNameById } = useGrapeStore();
 
 const emit = defineEmits<{
   (e: "update:show", bol: boolean): void;
@@ -53,16 +56,47 @@ const emit = defineEmits<{
 
 const props = defineProps<{
   show: boolean;
-  selectedWines: WineListItem;
+  selectedWines: WineListItem[];
   selectWineId: number;
 }>();
 
+// Получение имен сортов винограда для всех выбранных вин
+const grapesNames = computed(() => {
+  return props.selectedWines.reduce(
+    (acc, wine) => {
+      acc[wine.id] = getGrapesNameById(wine.wine.grapeIds);
+      return acc;
+    },
+    {} as Record<number, string | null>,
+  );
+});
+
+// Получение имен стран для всех выбранных вин
+const countryNames = computed(() => {
+  return props.selectedWines.reduce(
+    (acc, wine) => {
+      acc[wine.wine.countryId] = getCountryNameById(wine.wine.countryId);
+      return acc;
+    },
+    {} as Record<number, string | null>,
+  );
+});
+
+// Получение имен регионов для всех выбранных вин
+const regionNames = computed(() => {
+  return props.selectedWines.reduce(
+    (acc, wine) => {
+      acc[wine.wine.regionId] = getRegionNameById(wine.wine.regionId);
+      return acc;
+    },
+    {} as Record<number, string | null>,
+  );
+});
+
 const findIndex = computed(() => {
-  const wineIndex = props.selectedWines.find(
+  return props.selectedWines.findIndex(
     (w: WineListItem) => w.id === props.selectWineId,
   );
-  if (wineIndex) return props.selectedWines.indexOf(wineIndex);
-  else return -1;
 });
 
 const isVisible = computed({

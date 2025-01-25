@@ -23,8 +23,6 @@ interface Props {
 
 const props = defineProps<Props>();
 
-console.log(props.slideTo);
-
 const onSwiper = (swiper: any) => {
   swiper.slideTo(props.slideTo);
 };
