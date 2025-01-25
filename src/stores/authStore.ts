@@ -93,8 +93,16 @@ export const useAuthStore = defineStore("auth", () => {
 
   const checkAuth = () => isAuthenticated.value;
 
-  // Инициализация состояния аутентификации при создании стора
+
+  
+  const autoLogin = () => {
+    const email = import.meta.env.VITE_EMAIL;
+    const password = import.meta.env.VITE_PASSWORD;
+    if (email && password) login(email, password);
+  };
+         
   initAuth();
+  autoLogin();
 
   return {
     user,
