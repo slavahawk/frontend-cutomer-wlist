@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { initializeAuth } from "@/api/api";
-import PWABadge from "@/components/PWABadge.vue";
+// import PWABadge from "@/components/PWABadge.vue";
+import { onMounted } from "vue";
 
-initializeAuth();
+onMounted(() => {
+  initializeAuth();
+});
 </script>
 
 <template>
@@ -10,7 +13,7 @@ initializeAuth();
     <router-view />
   </Suspense>
   <Toast />
-  <PWABadge />
+  <!--  <PWABadge />-->
 </template>
 
 <style scoped></style>
