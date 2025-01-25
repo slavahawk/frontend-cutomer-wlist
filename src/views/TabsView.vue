@@ -157,3 +157,14 @@ if (route.query?.activeTab) {
   aspect-ratio: 1;
 }
 </style>
+
+<style>
+.p-accordionheader {
+  justify-content: start !important;
+  gap: 24px !important;
+}
+
+.p-datatable-thead tr th {
+  padding: 0 !important;
+}
+</style>
