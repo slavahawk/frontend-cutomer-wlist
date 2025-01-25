@@ -1,6 +1,6 @@
 <template>
   <Drawer v-model:visible="isVisible" header=" " position="full">
-    <SliderComponent v-if="selectedWines">
+    <SliderComponent v-if="selectedWines" :slideTo="findIndex">
       <SwiperSlide v-for="wine in selectedWines" :key="wine.id">
         <WineCard
           :originalImagePath="wine.wine.originalImagePath"
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { WineCard, WinePrice } from "w-list-components";
 import { vintage } from "w-list-utils";
 import {
@@ -56,6 +56,14 @@ const props = defineProps<{
   selectedWines: WineListItem;
   selectWineId: number;
 }>();
+
+const findIndex = computed(() => {
+  const wineIndex = props.selectedWines.find(
+    (w: WineListItem) => w.id === props.selectWineId,
+  );
+  if (wineIndex) return props.selectedWines.indexOf(wineIndex);
+  else return -1;
+});
 
 const isVisible = computed({
   get() {

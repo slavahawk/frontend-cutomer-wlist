@@ -2,7 +2,7 @@
 import { storeToRefs } from "pinia";
 import { useCountryStore } from "@/stores/countryStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useWineListStore } from "@/stores/wineListStore.ts";
 import {
   getCategoryLabelByValue,
@@ -14,6 +14,8 @@ import WineDetailsDialog from "@/components/WineDetailsDialog.vue";
 import { vintage } from "w-list-utils";
 import { WinePrice } from "w-list-components";
 import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
+import { useRouter, useRoute } from "vue-router";
+import { AppRoutes } from "@/router";
 
 const { getRegionNameById } = useRegionStore();
 const { getCountryNameById } = useCountryStore();
@@ -54,17 +56,28 @@ const selectWineId = ref<number | null>(null);
 const selectedWines = ref<WineListItem[] | null>(null);
 
 const showWineDetails = (data: any, item: any) => {
-  console.log(item);
   selectWineId.value = data.id;
   selectedWines.value = item.items;
   showDetails.value = true;
 };
+
+const activeTab = ref(0);
+const router = useRouter();
+const route = useRoute();
+
+watch(activeTab, (val) => {
+  router.push({ name: AppRoutes.TABS, query: { activeTab: val } });
+});
+
+if (route.query?.activeTab) {
+  activeTab.value = +route.query.activeTab;
+}
 </script>
 
 <template>
   <FloatingConfigurator v-show="false" />
   <div class="card p-0">
-    <Tabs :value="0" scrollable>
+    <Tabs v-model:value="activeTab" scrollable>
       <TabList>
         <Tab v-for="(tab, index) in tabContent" :key="index" :value="index">
           {{ tab.title }}

@@ -4,6 +4,7 @@
     :grabCursor="true"
     :modules="modules"
     class="mySwiper"
+    @swiper="onSwiper"
   >
     <slot />
   </swiper>
@@ -15,11 +16,23 @@ import "swiper/css/effect-cards";
 import { EffectCards } from "swiper/modules";
 
 const modules = [EffectCards];
+
+interface Props {
+  slideTo: number;
+}
+
+const props = defineProps<Props>();
+
+console.log(props.slideTo);
+
+const onSwiper = (swiper: any) => {
+  swiper.slideTo(props.slideTo);
+};
 </script>
 
 <style lang="scss">
 .swiper {
-  width: 80vw;
+  width: 86vw;
   height: 86vh;
 }
 
