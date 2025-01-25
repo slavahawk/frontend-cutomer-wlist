@@ -100,7 +100,6 @@ if (route.query?.activeTab) {
                   <span style="color: var(--primary-color)"
                     >{{ getNamingKey(key, tab) }}
                   </span>
-                  <span>{{ item.items.length }}</span>
                 </div></AccordionHeader
               >
               <AccordionContent>
