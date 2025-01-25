@@ -96,11 +96,11 @@ if (route.query?.activeTab) {
               :key="key"
             >
               <AccordionHeader>
-                <div
-                  class="text-2xl font-semibold"
-                  style="color: var(--primary-color)"
-                >
-                  {{ getNamingKey(key, tab) }}
+                <div class="text-2xl font-semibold flex gap-2">
+                  <span style="color: var(--primary-color)"
+                    >{{ getNamingKey(key, tab) }}
+                  </span>
+                  <span>{{ item.items.length }}</span>
                 </div></AccordionHeader
               >
               <AccordionContent>
