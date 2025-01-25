@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { initializeAuth } from "@/api/api";
+import { initializeAuth } from "w-list-api";
 // import PWABadge from "@/components/PWABadge.vue";
-import { onMounted } from "vue";
 
-onMounted(() => {
-  initializeAuth();
-});
+initializeAuth();
 </script>
 
 <template>
