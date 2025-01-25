@@ -24,17 +24,7 @@ const { initApp, isLoad } = useAppInitStore();
       />
     </div>
     <div class="layout-topbar-actions">
-      <span class="text-2xl">
-        <ProgressSpinner
-          v-if="false"
-          style="width: 50px; height: 50px; color: var(--primary-color)"
-          strokeWidth="8"
-          fill="transparent"
-          animationDuration=".5s"
-          aria-label="Custom ProgressSpinner"
-        />
-        {{ user?.email }}</span
-      >
+      {{ user?.email }}
     </div>
   </div>
 </template>
