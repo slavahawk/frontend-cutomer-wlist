@@ -89,47 +89,55 @@ if (route.query?.activeTab) {
           :key="index"
           :value="index"
         >
-          <div class="mb-12" v-for="(item, key) in tab.items" :key="key">
-            <DataTable :value="item.items" tableStyle="min-width: 50rem">
-              <template #header>
+          <Accordion multiple>
+            <AccordionPanel
+              :value="key"
+              v-for="(item, key) in tab.items"
+              :key="key"
+            >
+              <AccordionHeader>
                 <div
                   class="text-2xl font-semibold"
                   style="color: var(--primary-color)"
                 >
                   {{ getNamingKey(key, tab) }}
-                </div>
-              </template>
-              <Column field="vintage" class="w-14">
-                <template #body="{ data }">
-                  {{ vintage(data.wine.vintage) }}</template
-                >
-              </Column>
-              <Column field="name">
-                <template #body="{ data }">
-                  <div
-                    class="cursor-pointer"
-                    @click="showWineDetails(data, item)"
-                  >
-                    <div>{{ data.wine.name }}</div>
-                    <div style="color: var(--primary-color)">
-                      {{ getCountryNameById(data.wine.countryId) }},
-                      {{ getRegionNameById(data.wine.regionId) }}
-                    </div>
-                  </div>
-                </template>
-              </Column>
-              <Column field="pricePerGlass" class="w-[320px]">
-                <template #body="{ data }">
-                  <WinePrice
-                    :price-per-glass="data.pricePerGlass"
-                    :price-per-bottle="data.pricePerBottle"
-                    :bottle-volume="data.wine.bottleVolume"
-                    :glass-volume="data?.glassVolume"
-                  />
-                </template>
-              </Column>
-            </DataTable>
-          </div>
+                </div></AccordionHeader
+              >
+              <AccordionContent>
+                <DataTable :value="item.items">
+                  <Column field="vintage" class="w-14">
+                    <template #body="{ data }">
+                      {{ vintage(data.wine.vintage) }}</template
+                    >
+                  </Column>
+                  <Column field="name">
+                    <template #body="{ data }">
+                      <div
+                        class="cursor-pointer"
+                        @click="showWineDetails(data, item)"
+                      >
+                        <div>{{ data.wine.name }}</div>
+                        <div style="color: var(--primary-color)">
+                          {{ getCountryNameById(data.wine.countryId) }},
+                          {{ getRegionNameById(data.wine.regionId) }}
+                        </div>
+                      </div>
+                    </template>
+                  </Column>
+                  <Column field="pricePerGlass" class="w-[320px]">
+                    <template #body="{ data }">
+                      <WinePrice
+                        :price-per-glass="data.pricePerGlass"
+                        :price-per-bottle="data.pricePerBottle"
+                        :bottle-volume="data.wine.bottleVolume"
+                        :glass-volume="data?.glassVolume"
+                      />
+                    </template>
+                  </Column>
+                </DataTable>
+              </AccordionContent>
+            </AccordionPanel>
+          </Accordion>
         </TabPanel>
       </TabPanels>
     </Tabs>
