@@ -8,14 +8,23 @@ import {
   getCategoryLabelByValue,
   getColourLabelByValue,
   getSugarTypeLabelByValue,
+  type WineListItem,
 } from "w-list-api";
 import WineDetailsDialog from "@/components/WineDetailsDialog.vue";
 import { vintage } from "w-list-utils";
 import { WinePrice } from "w-list-components";
+import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
 
 const { getRegionNameById } = useRegionStore();
 const { getCountryNameById } = useCountryStore();
 const { activeWineList } = storeToRefs(useWineListStore());
+
+const categoryName = "Категории";
+const countryName = "Страны";
+const grapesName = "Виноград";
+const regionName = "Регионы";
+const sugarTypename = "Тип сахара";
+const colourName = "Цвет";
 
 const namingFunctions = {
   Категории: getCategoryLabelByValue,
@@ -27,12 +36,12 @@ const namingFunctions = {
 };
 
 const tabContent = computed(() => [
-  { title: "Категории", items: activeWineList.value?.categories },
-  { title: "Страны", items: activeWineList.value?.countries },
-  { title: "Виноград", items: activeWineList.value?.grapes },
-  { title: "Регионы", items: activeWineList.value?.regions },
-  { title: "Тип сахара", items: activeWineList.value?.sugarTypes },
-  { title: "Цвет", items: activeWineList.value?.colours },
+  { title: categoryName, items: activeWineList.value?.categories },
+  { title: countryName, items: activeWineList.value?.countries },
+  { title: grapesName, items: activeWineList.value?.grapes },
+  { title: regionName, items: activeWineList.value?.regions },
+  { title: sugarTypename, items: activeWineList.value?.sugarTypes },
+  { title: colourName, items: activeWineList.value?.colours },
 ]);
 
 const getNamingKey = (key: any, item: any) => {
@@ -41,16 +50,19 @@ const getNamingKey = (key: any, item: any) => {
 };
 
 const showDetails = ref(false);
-const selectWine = ref(null);
+const selectWineId = ref<number | null>(null);
+const selectedWines = ref<WineListItem[] | null>(null);
 
 const showWineDetails = (data: any, item: any) => {
   console.log(item);
-  selectWine.value = data;
+  selectWineId.value = data.id;
+  selectedWines.value = item.items;
   showDetails.value = true;
 };
 </script>
 
 <template>
+  <FloatingConfigurator v-show="false" />
   <div class="card p-0">
     <Tabs :value="0" scrollable>
       <TabList>
@@ -113,13 +125,11 @@ const showWineDetails = (data: any, item: any) => {
       </TabPanels>
     </Tabs>
 
-    <div v-if="selectWine">
+    <div v-if="selectedWines">
       <WineDetailsDialog
         v-model:show="showDetails"
-        :wine="selectWine.wine"
-        :price-per-bottle="selectWine.pricePerBottle"
-        :price-per-glass="selectWine.pricePerGlass"
-        :glassVolume="selectWine?.glassVolume"
+        :selectedWines="selectedWines"
+        :selectWineId="selectWineId"
       />
     </div>
   </div>

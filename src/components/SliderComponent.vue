@@ -5,11 +5,11 @@
     :modules="modules"
     class="mySwiper"
   >
-    <swiper-slide v-for="item in 6"> <slot></slot></swiper-slide>
+    <slot />
   </swiper>
 </template>
 <script lang="ts" setup>
-import { Swiper, SwiperSlide } from "swiper/vue";
+import { Swiper } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import { EffectCards } from "swiper/modules";
@@ -20,21 +20,17 @@ const modules = [EffectCards];
 <style lang="scss">
 .swiper {
   width: 80vw;
-  height: 80vh;
+  height: 86vh;
 }
 
 .swiper-slide {
   display: flex;
-  //align-items: center;
   justify-content: center;
   border-radius: 18px;
-  //font-size: 22px;
-  //font-weight: bold;
-  //color: #fff;
-  background: white;
+  background: var(--surface-card);
   box-shadow:
-    0 8px 16px 0 rgba(0, 0, 0, 0.2),
+    0 8px 16px 0 var(--primary-contrast-color),
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  padding: 12px;
+  padding: 24px;
 }
 </style>

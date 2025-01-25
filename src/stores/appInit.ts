@@ -16,6 +16,7 @@ export const useAppInitStore = defineStore("appInit", () => {
   const { getMe } = useAuthStore();
 
   const initApp = () => {
+    isLoad.value = true;
     Promise.allSettled([
       getMe(),
       fetchRegions(),
