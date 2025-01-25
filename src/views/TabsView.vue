@@ -90,11 +90,7 @@ if (route.query?.activeTab) {
           :value="index"
         >
           <div class="mb-12" v-for="(item, key) in tab.items" :key="key">
-            <DataTable
-              :value="item.items"
-              tableStyle="min-width: 50rem"
-              stripedRows
-            >
+            <DataTable :value="item.items" tableStyle="min-width: 50rem">
               <template #header>
                 <div
                   class="text-2xl font-semibold"
@@ -122,7 +118,7 @@ if (route.query?.activeTab) {
                   </div>
                 </template>
               </Column>
-              <Column field="pricePerGlass" sortable class="w-[320px]">
+              <Column field="pricePerGlass" class="w-[320px]">
                 <template #body="{ data }">
                   <WinePrice
                     :price-per-glass="data.pricePerGlass"

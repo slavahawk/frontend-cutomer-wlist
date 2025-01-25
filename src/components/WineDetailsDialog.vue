@@ -58,11 +58,9 @@ const props = defineProps<{
 }>();
 
 const findIndex = computed(() => {
-  const wineIndex = props.selectedWines.find(
+  return props.selectedWines.findIndex(
     (w: WineListItem) => w.id === props.selectWineId,
   );
-  if (wineIndex) return props.selectedWines.indexOf(wineIndex);
-  else return -1;
 });
 
 const isVisible = computed({
