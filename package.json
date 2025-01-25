@@ -32,13 +32,13 @@
     "vue": "^3.5.13",
     "vue-router": "^4.4.5",
     "w-list-api": "^1.1.14",
-    "w-list-components": "^1.0.9",
+    "w-list-components": "^1.0.10",
     "w-list-utils": "^1.0.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.0",
-    "@types/node": "^22.9.3",
+    "@types/node": "^22.10.10",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/cli-plugin-pwa": "~5.0.0",
     "@vue/tsconfig": "^0.7.0",
@@ -46,7 +46,7 @@
     "prettier": "^3.4.2",
     "typescript": "~5.7.3",
     "vite": "^6.0.1",
-    "vite-plugin-vue-devtools": "^7.6.5",
+    "vite-plugin-vue-devtools": "^7.7.1",
     "vue-tsc": "^2.1.10"
   }
 }

@@ -3,7 +3,7 @@ import axios, {
   type AxiosRequestConfig,
   type AxiosResponse,
 } from "axios";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/const/localstorage.ts";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "w-list-api";
 import { RoutePath } from "@/router";
 import router from "@/router";
 

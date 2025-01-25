@@ -1,27 +1,9 @@
 <script setup lang="ts">
 import AppTopbar from "./AppTopbar.vue";
+import { storeToRefs } from "pinia";
+import { useAppInitStore } from "@/stores/appInit.ts";
 
-import { useCountryStore } from "@/stores/countryStore.ts";
-import { useGrapeStore } from "@/stores/grapeStore.ts";
-import { useRegionStore } from "@/stores/regionStore.ts";
-import { useWineListStore } from "@/stores/wineListStore.ts";
-import { useAuthStore } from "@/stores/authStore.ts";
-import { ref } from "vue";
-
-const { fetchCountries } = useCountryStore();
-const { fetchGrapes } = useGrapeStore();
-const { fetchRegions } = useRegionStore();
-const { getActiveList } = useWineListStore();
-const { getMe } = useAuthStore();
-
-const isLoad = ref(true);
-Promise.allSettled([
-  getMe(),
-  fetchRegions(),
-  fetchGrapes(),
-  fetchCountries(),
-  getActiveList(),
-]).finally(() => (isLoad.value = false));
+const { isLoad } = storeToRefs(useAppInitStore());
 </script>
 
 <template>

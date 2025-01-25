@@ -17,8 +17,8 @@ const { user, isLoad } = storeToRefs(useAuthStore());
     <div class="layout-topbar-actions">
       <span class="text-2xl">
         <ProgressSpinner
-          v-if="isLoad"
-          style="width: 50px; height: 50px"
+          v-if="false"
+          style="width: 50px; height: 50px; color: var(--primary-color)"
           strokeWidth="8"
           fill="transparent"
           animationDuration=".5s"

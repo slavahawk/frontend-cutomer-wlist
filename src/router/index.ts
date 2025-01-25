@@ -1,6 +1,7 @@
 import AppLayout from "@/layout/AppLayout.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
+import DefaultLayout from "@/layout/DefaultLayout.vue";
 
 export enum AppRoutes {
   MAIN = "Main",
@@ -20,30 +21,36 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: RoutePath.Main,
-      name: AppRoutes.MAIN,
-      component: () => import("@/views/Main.vue"),
-      meta: { requiresAuth: true },
-    },
-
-    {
       path: "/",
-      component: AppLayout,
+      component: DefaultLayout,
       children: [
         {
-          path: RoutePath.Tabs,
-          name: AppRoutes.TABS,
-          component: () => import("@/views/TabsView.vue"),
+          path: RoutePath.Main,
+          name: AppRoutes.MAIN,
+          component: () => import("@/views/Main.vue"),
           meta: { requiresAuth: true },
         },
         {
-          path: RoutePath.Wines,
-          name: AppRoutes.WINES,
-          component: () => import("@/views/Wines.vue"),
-          meta: { requiresAuth: true },
+          path: "/",
+          component: AppLayout,
+          children: [
+            {
+              path: RoutePath.Tabs,
+              name: AppRoutes.TABS,
+              component: () => import("@/views/TabsView.vue"),
+              meta: { requiresAuth: true },
+            },
+            {
+              path: RoutePath.Wines,
+              name: AppRoutes.WINES,
+              component: () => import("@/views/Wines.vue"),
+              meta: { requiresAuth: true },
+            },
+          ],
         },
       ],
     },
+
     {
       path: "/:pathMatch(.*)*",
       name: "notfound",

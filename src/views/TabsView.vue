@@ -43,7 +43,8 @@ const getNamingKey = (key: any, item: any) => {
 const showDetails = ref(false);
 const selectWine = ref(null);
 
-const showWineDetails = (data: any) => {
+const showWineDetails = (data: any, item: any) => {
+  console.log(item);
   selectWine.value = data;
   showDetails.value = true;
 };
@@ -84,7 +85,10 @@ const showWineDetails = (data: any) => {
               </Column>
               <Column field="name">
                 <template #body="{ data }">
-                  <div class="cursor-pointer" @click="showWineDetails(data)">
+                  <div
+                    class="cursor-pointer"
+                    @click="showWineDetails(data, item)"
+                  >
                     <div>{{ data.wine.name }}</div>
                     <div style="color: var(--primary-color)">
                       {{ getCountryNameById(data.wine.countryId) }},
