@@ -2,7 +2,7 @@
 import { storeToRefs } from "pinia";
 import { useCountryStore } from "@/stores/countryStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch } from "vue"; // Включите onMounted
 import { useWineListStore } from "@/stores/wineListStore.ts";
 import {
   getCategoryLabelByValue,
@@ -14,7 +14,7 @@ import WineDetailsDialog from "@/components/WineDetailsDialog.vue";
 import { vintage } from "w-list-utils";
 import { WinePrice } from "w-list-components";
 import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { AppRoutes } from "@/router";
 
 const { getRegionNameById } = useRegionStore();
@@ -61,11 +61,16 @@ const showWineDetails = (data: any, item: any) => {
   showDetails.value = true;
 };
 
+const activeAccordion = ref<number | string[]>([]);
 const activeTab = ref(0);
 const router = useRouter();
 const route = useRoute();
 
 watch(activeTab, (val) => {
+  const tabs = tabContent.value.find((tab, index) => index === val);
+
+  activeAccordion.value = Object.keys(tabs?.items);
+
   router.push({ name: AppRoutes.TABS, query: { activeTab: val } });
 });
 
@@ -89,7 +94,7 @@ if (route.query?.activeTab) {
           :key="index"
           :value="index"
         >
-          <Accordion multiple>
+          <Accordion v-model:value="activeAccordion" multiple>
             <AccordionPanel
               :value="key"
               v-for="(item, key) in tab.items"
@@ -97,11 +102,11 @@ if (route.query?.activeTab) {
             >
               <AccordionHeader>
                 <div class="text-2xl font-semibold flex gap-2">
-                  <span style="color: var(--primary-color)"
-                    >{{ getNamingKey(key, tab) }}
+                  <span style="color: var(--primary-color)">
+                    {{ getNamingKey(key, tab) }}
                   </span>
-                </div></AccordionHeader
-              >
+                </div>
+              </AccordionHeader>
               <AccordionContent>
                 <DataTable :value="item.items">
                   <Column field="vintage" class="w-14">
@@ -165,6 +170,10 @@ if (route.query?.activeTab) {
 }
 
 .p-datatable-thead tr th {
+  padding: 0 !important;
+}
+
+.p-accordioncontent-content {
   padding: 0 !important;
 }
 </style>

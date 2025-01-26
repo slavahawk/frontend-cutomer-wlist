@@ -48,7 +48,15 @@ export default defineConfig({
     noDiscovery: true,
   },
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => {
+            return ["swiper-slide", "swiper-container"].includes(tag);
+          },
+        },
+      },
+    }),
     vueDevTools(),
     Components({
       resolvers: [PrimeVueResolver()],
