@@ -121,14 +121,14 @@ if (route.query?.activeTab) {
                         @click="showWineDetails(data, item)"
                       >
                         <div>{{ data.wine.name }}</div>
-                        <div style="color: var(--primary-color)">
+                        <div style="color: var(--p-primary-400)">
                           {{ getCountryNameById(data.wine.countryId) }},
                           {{ getRegionNameById(data.wine.regionId) }}
                         </div>
                       </div>
                     </template>
                   </Column>
-                  <Column field="pricePerGlass" class="w-[320px]">
+                  <Column field="pricePerGlass" class="w-[340px]">
                     <template #body="{ data }">
                       <WinePrice
                         :price-per-glass="data.pricePerGlass"
