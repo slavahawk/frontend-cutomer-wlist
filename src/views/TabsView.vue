@@ -13,7 +13,6 @@ import {
 import WineDetailsDialog from "@/components/WineDetailsDialog.vue";
 import { vintage } from "w-list-utils";
 import { WinePrice } from "w-list-components";
-import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
 import { useRoute, useRouter } from "vue-router";
 import { AppRoutes } from "@/router";
 
@@ -66,21 +65,26 @@ const activeTab = ref(0);
 const router = useRouter();
 const route = useRoute();
 
-watch(activeTab, (val) => {
-  const tabs = tabContent.value.find((tab, index) => index === val);
+const updateActiveAccordion = () => {
+  const selectedTab = tabContent.value[activeTab.value];
+  activeAccordion.value = Object.keys(selectedTab?.items || {});
+};
 
-  activeAccordion.value = Object.keys(tabs?.items);
-
-  router.push({ name: AppRoutes.TABS, query: { activeTab: val } });
+watch(activeTab, () => {
+  updateActiveAccordion(); // Update the accordion
+  router.push({ name: AppRoutes.TABS, query: { activeTab: activeTab.value } }); // Navigate
 });
 
-if (route.query?.activeTab) {
-  activeTab.value = +route.query.activeTab;
-}
+const initActiveTab = () => {
+  const routeTab = Number(route.query.activeTab);
+  activeTab.value = !isNaN(routeTab) ? routeTab : 0; // Use the route value or default to 0
+};
+
+initActiveTab();
+updateActiveAccordion();
 </script>
 
 <template>
-  <FloatingConfigurator v-show="false" />
   <div class="card p-0">
     <Tabs v-model:value="activeTab" scrollable>
       <TabList>
@@ -111,7 +115,11 @@ if (route.query?.activeTab) {
                 <DataTable :value="item.items">
                   <Column field="vintage" class="w-14">
                     <template #body="{ data }">
-                      {{ vintage(data.wine.vintage) }}</template
+                      <span
+                        class="cursor-pointer"
+                        @click="showWineDetails(data, item)"
+                        >{{ vintage(data.wine.vintage) }}</span
+                      ></template
                     >
                   </Column>
                   <Column field="name">
@@ -128,13 +136,15 @@ if (route.query?.activeTab) {
                       </div>
                     </template>
                   </Column>
-                  <Column field="pricePerGlass" class="w-[340px]">
+                  <Column field="pricePerBottle" class="w-[340px]">
                     <template #body="{ data }">
                       <WinePrice
+                        class="cursor-pointer"
                         :price-per-glass="data.pricePerGlass"
                         :price-per-bottle="data.pricePerBottle"
                         :bottle-volume="data.wine.bottleVolume"
                         :glass-volume="data?.glassVolume"
+                        @click="showWineDetails(data, item)"
                       />
                     </template>
                   </Column>

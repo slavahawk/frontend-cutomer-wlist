@@ -1,9 +1,7 @@
 <template>
-  <FloatingConfigurator />
   <div
-    class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden"
+    class="bg-surface-50 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden"
   >
-    <!--    <img src="https://dummyjson.com/image/150" alt="">-->
     <div class="flex flex-col items-center justify-center">
       <div
         style="
@@ -17,7 +15,7 @@
         "
       >
         <div
-          class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20"
+          class="w-full bgSurface0 py-20 px-8 sm:px-20"
           style="border-radius: 53px"
         >
           <div class="text-center mb-8">
@@ -31,6 +29,7 @@
               >Войдите, чтобы продолжить</span
             >
           </div>
+
           <Form
             v-slot="$form"
             :initialValues="initialValues"
@@ -38,9 +37,9 @@
             @submit="handleSubmit"
             class="form"
           >
-            <div class="input-container">
+            <div class="input-container mb-4">
               <label
-                for="email1"
+                for="email"
                 class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"
                 >Email</label
               >
@@ -50,7 +49,7 @@
                 type="text"
                 placeholder="Email адрес"
                 class="w-full md:w-[30rem]"
-                v-model="initialValues.email"
+                v-model.trim="initialValues.email"
                 autocomplete="email"
               />
               <Message
@@ -62,7 +61,7 @@
               >
             </div>
 
-            <div class="input-container">
+            <div class="input-container mb-4">
               <label
                 for="password"
                 class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2"
@@ -71,7 +70,7 @@
               <Password
                 id="password"
                 name="password"
-                v-model="initialValues.password"
+                v-model.trim="initialValues.password"
                 placeholder="Пароль"
                 :toggleMask="true"
                 fluid
@@ -92,7 +91,7 @@
               label="Войти"
               class="w-full"
               type="submit"
-            ></Button>
+            />
 
             <div class="flex items-center justify-end mt-4 mb-8">
               <ForgotPasswordDialog />
@@ -107,8 +106,6 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { z } from "zod";
-
-import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
 import { useAuthStore } from "@/stores/authStore.ts";
 import Logo from "@/assets/images/svg/Logo.vue";
 import ForgotPasswordDialog from "@/components/ForgotPasswordDialog.vue";
@@ -116,6 +113,7 @@ import { ACCESS_TOKEN } from "w-list-api";
 
 const authStore = useAuthStore();
 
+// Clear access token from local storage on component mount
 if (localStorage.getItem(ACCESS_TOKEN)) {
   localStorage.removeItem(ACCESS_TOKEN);
 }
@@ -125,7 +123,7 @@ const initialValues = reactive({
   password: "",
 });
 
-// Определите схему Zod для валидации
+// Define Zod schema for validation
 const schema = z.object({
   email: z
     .string()
@@ -137,20 +135,21 @@ const schema = z.object({
     .min(6, "Минимум 6 символов"),
 });
 
+// Resolver function for validation
 const resolver = async ({ values }) => {
   try {
     schema.parse(values);
-    return { errors: {} }; // Если ошибок нет, возвращаем пустой объект ошибок
+    return { errors: {} }; // Return empty error object if no errors
   } catch (e) {
     if (e instanceof z.ZodError) {
       const errors = e.errors.reduce((acc, error) => {
-        const path = error.path[0]; // Получаем путь к ошибке
-        acc[path] = [{ message: error.message }]; // Добавляем ошибку по пути
+        const path = error.path[0]; // Get the path to the error
+        acc[path] = [{ message: error.message }]; // Add error to path
         return acc;
       }, {});
-      return { errors }; // Возвращаем ошибки
+      return { errors }; // Return errors
     }
-    return { errors: {} }; // На случай других ошибок
+    return { errors: {} }; // In case of other errors
   }
 };
 
@@ -163,5 +162,8 @@ const handleSubmit = async ({ valid, states }) => {
 </script>
 
 <style scoped>
-/* Ваши стили здесь */
+/* Your styles here - consider adding your specific adjustments here */
+.input-container {
+  margin-bottom: 1rem; /* Example margin for input container */
+}
 </style>

@@ -41,8 +41,10 @@ onMounted(() => {
 
 <style lang="scss">
 .mySwiper {
-  width: 86vw;
+  width: 100%;
+  max-width: 800px;
   height: 86vh;
+  margin: 0 auto;
 
   swiper-slide {
     display: flex;

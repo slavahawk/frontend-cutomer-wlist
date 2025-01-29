@@ -18,7 +18,6 @@ declare module 'vue' {
     DataTable: typeof import('primevue/datatable')['default']
     Dialog: typeof import('primevue/dialog')['default']
     Drawer: typeof import('primevue/drawer')['default']
-    FloatingConfigurator: typeof import('./src/components/FloatingConfigurator.vue')['default']
     ForgotPasswordDialog: typeof import('./src/components/ForgotPasswordDialog.vue')['default']
     ForgotPasswordForm: typeof import('./src/components/form/ForgotPasswordForm.vue')['default']
     Form: typeof import('@primevue/forms/form')['default']
