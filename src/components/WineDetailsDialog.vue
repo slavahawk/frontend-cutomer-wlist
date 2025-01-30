@@ -3,7 +3,7 @@
     <SliderComponent v-if="selectedWines" :slideTo="findIndex">
       <SwiperSlide v-for="wine in selectedWines" :key="wine.id">
         <WineCard
-          :originalImagePath="wine.wine.originalImagePath"
+          :img="wine.wine.originalImagePath"
           :name="wine.wine.name"
           :alcohol-by-volume="wine.wine.alcoholByVolume"
           :interesting-facts="wine.wine.interestingFacts"
@@ -16,13 +16,16 @@
           :colour="getColourLabelByValue(wine.wine.colour)"
           :region="regionNames[wine.wine.regionId]"
         >
-          <p class="mb-4">
-            <WinePrice
-              :price-per-glass="wine?.pricePerGlass"
-              :price-per-bottle="wine.pricePerBottle"
-              :bottle-volume="wine.wine.bottleVolume"
-              :glass-volume="wine.glassVolume"
-            />
+          <p class="mb-4 flex gap-2 items-center">
+              <WinePriceGlass
+                :price-per-glass="wine.pricePerGlass"
+                :glass-volume="wine?.glassVolume"
+              />
+              <WinePriceBottle
+                :price-per-bottle="wine.pricePerBottle"
+                :bottle-volume="wine.wine.bottleVolume"
+              />
+              
           </p>
         </WineCard>
       </SwiperSlide>
@@ -32,7 +35,7 @@
 
 <script lang="ts" setup>
 import { computed } from "vue";
-import { WineCard, WinePrice } from "w-list-components";
+import { WineCard, WinePriceBottle, WinePriceGlass } from "w-list-components";
 import { vintage } from "w-list-utils";
 import {
   getCategoryLabelByValue,

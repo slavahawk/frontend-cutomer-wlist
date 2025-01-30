@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
+import WineDetailsDialog from "@/components/WineDetailsDialog.vue";
+import { AppRoutes } from "@/router";
 import { useCountryStore } from "@/stores/countryStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
-import { computed, ref, watch } from "vue";
 import { useWineListStore } from "@/stores/wineListStore.ts";
+import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import {
   getCategoryLabelByValue,
   getColourLabelByValue,
   getSugarTypeLabelByValue,
   type WineListItem,
 } from "w-list-api";
-import WineDetailsDialog from "@/components/WineDetailsDialog.vue";
+import { WinePriceBottle, WinePriceGlass } from "w-list-components";
 import { vintage } from "w-list-utils";
-import { WinePrice } from "w-list-components";
-import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
-import { useRouter, useRoute } from "vue-router";
-import { AppRoutes } from "@/router";
 
 const { getRegionNameById } = useRegionStore();
 const { getCountryNameById } = useCountryStore();
@@ -123,13 +123,19 @@ if (route.query?.activeTab) {
                       </div>
                     </template>
                   </Column>
-                  <Column field="pricePerGlass" class="w-[320px]">
+                  <Column field="pricePerGlass" header="Цена за бокал" sortable class="w-[200px]">
                     <template #body="{ data }">
-                      <WinePrice
+                       <WinePriceGlass
                         :price-per-glass="data.pricePerGlass"
+                        :glass-volume="data?.glassVolume"
+                      />
+                    </template>
+                  </Column>
+                  <Column field="pricePerBottle" header="Цена за бутылку" sortable class="w-[200px]">
+                    <template #body="{ data }">
+                       <WinePriceBottle
                         :price-per-bottle="data.pricePerBottle"
                         :bottle-volume="data.wine.bottleVolume"
-                        :glass-volume="data?.glassVolume"
                       />
                     </template>
                   </Column>
@@ -162,9 +168,5 @@ if (route.query?.activeTab) {
 .p-accordionheader {
   justify-content: start !important;
   gap: 24px !important;
-}
-
-.p-datatable-thead tr th {
-  padding: 0 !important;
 }
 </style>
