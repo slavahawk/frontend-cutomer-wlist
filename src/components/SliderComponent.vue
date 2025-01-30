@@ -1,21 +1,20 @@
 <template>
-  <swiper
-    :effect="'cards'"
-    :grabCursor="true"
-    :modules="modules"
+  <swiper-container
+    :initialSlide="props.slideTo"
+    init="false"
+    effect="cards"
     class="mySwiper"
-    @swiper="onSwiper"
+    virtual
   >
     <slot />
-  </swiper>
+  </swiper-container>
 </template>
 <script lang="ts" setup>
-import { Swiper } from "swiper/vue";
-import "swiper/css";
-import "swiper/css/effect-cards";
+import { register } from "swiper/element";
 import { EffectCards } from "swiper/modules";
+import { onMounted } from "vue";
 
-const modules = [EffectCards];
+register();
 
 interface Props {
   slideTo: number;
@@ -23,25 +22,39 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const onSwiper = (swiper: any) => {
-  swiper.slideTo(props.slideTo);
-};
+// const onSwiper = (swiper: any) => {
+//   swiper.slideTo(props.slideTo);
+// };
+
+onMounted(() => {
+  const swiperEl = document.querySelector("swiper-container");
+
+  const params = {
+    modules: [EffectCards],
+    // inject modules styles to shadow DOM
+  };
+  Object.assign(swiperEl, params);
+
+  swiperEl.initialize();
+});
 </script>
 
 <style lang="scss">
-.swiper {
-  width: 86vw;
+.mySwiper {
+  width: 100%;
+  max-width: 800px;
   height: 86vh;
-}
+  margin: 0 auto;
 
-.swiper-slide {
-  display: flex;
-  justify-content: center;
-  border-radius: 18px;
-  background: var(--surface-card);
-  box-shadow:
-    0 8px 16px 0 var(--primary-contrast-color),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  padding: 24px;
+  swiper-slide {
+    display: flex;
+    justify-content: center;
+    border-radius: 18px;
+    background: var(--surface-card);
+    box-shadow:
+      0 8px 16px 0 var(--primary-contrast-color),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 24px;
+  }
 }
 </style>

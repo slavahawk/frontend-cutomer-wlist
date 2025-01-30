@@ -18,7 +18,6 @@ declare module 'vue' {
     DataTable: typeof import('primevue/datatable')['default']
     Dialog: typeof import('primevue/dialog')['default']
     Drawer: typeof import('primevue/drawer')['default']
-    FloatingConfigurator: typeof import('./src/components/FloatingConfigurator.vue')['default']
     ForgotPasswordDialog: typeof import('./src/components/ForgotPasswordDialog.vue')['default']
     ForgotPasswordForm: typeof import('./src/components/form/ForgotPasswordForm.vue')['default']
     Form: typeof import('@primevue/forms/form')['default']
@@ -30,7 +29,6 @@ declare module 'vue' {
     ResetPasswordForm: typeof import('./src/components/form/ResetPasswordForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SelectButton: typeof import('primevue/selectbutton')['default']
     SliderComponent: typeof import('./src/components/SliderComponent.vue')['default']
     Tab: typeof import('primevue/tab')['default']
     TabList: typeof import('primevue/tablist')['default']
@@ -39,8 +37,5 @@ declare module 'vue' {
     Tabs: typeof import('primevue/tabs')['default']
     Toast: typeof import('primevue/toast')['default']
     WineDetailsDialog: typeof import('./src/components/WineDetailsDialog.vue')['default']
-  }
-  export interface ComponentCustomProperties {
-    StyleClass: typeof import('primevue/styleclass')['default']
   }
 }

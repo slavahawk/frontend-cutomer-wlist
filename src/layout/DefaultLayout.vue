@@ -6,7 +6,6 @@
 
 <script setup lang="ts">
 import { useAppInitStore } from "@/stores/appInit.ts";
-
 const { initApp } = useAppInitStore();
 
 initApp();

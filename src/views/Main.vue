@@ -1,6 +1,6 @@
 <template>
-  <div @click="$router.push({ name: AppRoutes.TABS })">
-    <img :src="MainBanner" class="bgExampleClass" alt="">
+  <div class="mainBanner" @click="$router.push({ name: AppRoutes.TABS })">
+    <img :src="MainBanner" class="bgExampleClass" alt="Main">
   </div>
 </template>
 
@@ -15,8 +15,7 @@ import MainBanner from "@/assets/images/main.jpeg";
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  position: relative;
+  position: relative;  /* Ensure the image is positioned relative to this container */
 
   &__content {
     z-index: 1;
@@ -24,24 +23,12 @@ import MainBanner from "@/assets/images/main.jpeg";
 }
 
 .bgExampleClass {
-  position: absolute;
+  width: 100%;     /* set the width to fill the container */
+  height: 100%;    /* set the height to fill the container */
+  object-fit: cover; /* ensures the image covers the area */
+  position: absolute; /* positions the image absolutely in the parent */
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-
-  &::after {
-    position: absolute;
-    content: "";
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 0;
-  }
+  z-index: 0; /* set the z-index to be behind the content */
 }
 </style>

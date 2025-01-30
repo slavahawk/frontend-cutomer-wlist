@@ -16,7 +16,11 @@ export const useAuthStore = defineStore("auth", () => {
   const router = useRouter();
 
   const initAuth = () => {
+
+          autoLogin();
     isAuthenticated.value = !!localStorage.getItem(REFRESH_TOKEN);
+
+
   };
 
   const showToast = (severity: any, summary: string) => {
@@ -100,9 +104,9 @@ export const useAuthStore = defineStore("auth", () => {
     const password = import.meta.env.VITE_PASSWORD;
     if (email && password) login(email, password);
   };
-         
+
+
   initAuth();
-  autoLogin();
 
   return {
     user,
@@ -113,5 +117,6 @@ export const useAuthStore = defineStore("auth", () => {
     logout,
     checkAuth,
     getMe,
+    autoLogin
   };
 });

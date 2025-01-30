@@ -15,15 +15,24 @@ export const useAppInitStore = defineStore("appInit", () => {
   const { getActiveList } = useWineListStore();
   const { getMe } = useAuthStore();
 
-  const initApp = () => {
-    isLoad.value = true;
-    Promise.allSettled([
-      getMe(),
-      fetchRegions(),
-      fetchGrapes(),
-      fetchCountries(),
-      getActiveList(),
-    ]).finally(() => (isLoad.value = false));
+  const initApp = async () => {
+    try {
+      isLoad.value = true;
+
+      await getMe(); // Ждем получения данных о пользователе
+
+      // Ждем завершения всех запросов
+      await Promise.allSettled([
+        fetchRegions(),
+        fetchGrapes(),
+        fetchCountries(),
+        getActiveList(),
+      ]);
+    } catch (err) {
+      console.error("Ошибка при инициализации приложения:", err);
+    } finally {
+      isLoad.value = false;
+    }
   };
 
   return { isLoad, initApp };

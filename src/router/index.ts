@@ -12,7 +12,7 @@ export enum AppRoutes {
 
 export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.MAIN]: "/",
-  [AppRoutes.LOGIN]: "/auth/login",
+  [AppRoutes.LOGIN]: "/auth",
   [AppRoutes.TABS]: "/tabs",
   [AppRoutes.WINES]: "/wines",
 };
@@ -54,23 +54,13 @@ const router = createRouter({
     {
       path: "/:pathMatch(.*)*",
       name: "notfound",
-      component: () => import("@/views/pages/NotFound.vue"),
+      component: () => import("@/views/NotFound.vue"),
     },
 
     {
       path: RoutePath.Login,
       name: AppRoutes.LOGIN,
-      component: () => import("@/views/pages/auth/Login.vue"),
-    },
-    {
-      path: "/auth/access",
-      name: "accessDenied",
-      component: () => import("@/views/pages/auth/Access.vue"),
-    },
-    {
-      path: "/auth/error",
-      name: "error",
-      component: () => import("@/views/pages/auth/Error.vue"),
+      component: () => import("@/views/Login.vue"),
     },
   ],
 });

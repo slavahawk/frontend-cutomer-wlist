@@ -5,6 +5,7 @@ import vueDevTools from "vite-plugin-vue-devtools";
 import { PrimeVueResolver } from "@primevue/auto-import-resolver";
 import Components from "unplugin-vue-components/vite";
 import { VitePWA } from "vite-plugin-pwa";
+import tailwindcss from "@tailwindcss/vite";
 
 const pwa = VitePWA({
   manifest: {
@@ -48,7 +49,16 @@ export default defineConfig({
     noDiscovery: true,
   },
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => {
+            return ["swiper-slide", "swiper-container"].includes(tag);
+          },
+        },
+      },
+    }),
+    tailwindcss(),
     vueDevTools(),
     Components({
       resolvers: [PrimeVueResolver()],

@@ -1,7 +1,7 @@
 <template>
   <Drawer v-model:visible="isVisible" header=" " position="full">
     <SliderComponent v-if="selectedWines" :slideTo="findIndex">
-      <SwiperSlide v-for="wine in selectedWines" :key="wine.id">
+      <swiper-slide v-for="wine in selectedWines" :key="wine.id">
         <WineCard
           :img="wine.wine.originalImagePath"
           :name="wine.wine.name"
@@ -28,7 +28,7 @@
               
           </p>
         </WineCard>
-      </SwiperSlide>
+      </swiper-slide>
     </SliderComponent>
   </Drawer>
 </template>
@@ -46,7 +46,6 @@ import {
 import { useCountryStore } from "@/stores/countryStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
 import SliderComponent from "@/components/SliderComponent.vue";
-import { SwiperSlide } from "swiper/vue";
 import { useGrapeStore } from "@/stores/grapeStore.ts";
 
 const { getCountryNameById } = useCountryStore();
@@ -112,7 +111,7 @@ const isVisible = computed({
 });
 </script>
 
-<style>
+<style lang="scss">
 .p-drawer {
   background: none !important;
 }
