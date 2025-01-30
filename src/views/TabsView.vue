@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
 import WineDetailsDialog from "@/components/WineDetailsDialog.vue";
 import { AppRoutes } from "@/router";
 import { useCountryStore } from "@/stores/countryStore.ts";
