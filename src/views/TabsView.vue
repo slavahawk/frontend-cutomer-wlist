@@ -85,7 +85,7 @@ updateActiveAccordion();
 </script>
 
 <template>
-  <div class="card !p-0">
+  <div class="card !p-0 customBlock">
     <Tabs v-model:value="activeTab" scrollable>
       <TabList>
         <Tab v-for="(tab, index) in tabContent" :key="index" :value="index">
@@ -112,7 +112,12 @@ updateActiveAccordion();
                 </div>
               </AccordionHeader>
               <AccordionContent>
-                <DataTable :value="item.items" sortField="pricePerBottle" :sortOrder="-1" tableStyle="min-width: 50rem">
+                <DataTable
+                  :value="item.items"
+                  sortField="pricePerBottle"
+                  :sortOrder="-1"
+                  tableStyle="min-width: 50rem"
+                >
                   <Column field="vintage" class="w-14">
                     <template #body="{ data }">
                       <span
@@ -136,21 +141,31 @@ updateActiveAccordion();
                       </div>
                     </template>
                   </Column>
-                  <Column field="pricePerGlass" header="Цена за бокал" sortable class="w-[200px]">
+                  <Column
+                    field="pricePerGlass"
+                    header="Цена за бокал"
+                    sortable
+                    class="w-[200px]"
+                  >
                     <template #body="{ data }">
-                       <WinePriceGlass
-                         :price-per-glass="data.pricePerGlass"
+                      <WinePriceGlass
+                        :price-per-glass="data.pricePerGlass"
                         :glass-volume="data?.glassVolume"
-                         @click="showWineDetails(data, item)"
-                         />
+                        @click="showWineDetails(data, item)"
+                      />
                     </template>
                   </Column>
-                  <Column field="pricePerBottle" header="Цена за бутылку" sortable class="w-[200px]">
+                  <Column
+                    field="pricePerBottle"
+                    header="Цена за бутылку"
+                    sortable
+                    class="w-[200px]"
+                  >
                     <template #body="{ data }">
-                       <WinePriceBottle
+                      <WinePriceBottle
                         :price-per-bottle="data.pricePerBottle"
                         :bottle-volume="data.wine.bottleVolume"
-                         @click="showWineDetails(data, item)"
+                        @click="showWineDetails(data, item)"
                       />
                     </template>
                   </Column>
@@ -180,11 +195,17 @@ updateActiveAccordion();
 </style>
 
 <style>
-.p-accordionheader {
-  justify-content: start !important;
-  gap: 24px !important;
-}
-.p-accordioncontent-content {
-  padding: 0 !important;
+.customBlock {
+  .p-accordionheader {
+    justify-content: start !important;
+    gap: 24px !important;
+  }
+  .p-accordioncontent-content {
+    padding: 0 !important;
+  }
+
+  .p-accordionheader {
+    padding: 0.75rem 1.25rem 0.75rem !important;
+  }
 }
 </style>

@@ -24,7 +24,7 @@ const { initApp, isLoad } = useAppInitStore();
       />
     </div>
     <div class="layout-topbar-actions">
-      {{ user?.email }}
+      <!--      {{ user?.email }}-->
     </div>
   </div>
 </template>
