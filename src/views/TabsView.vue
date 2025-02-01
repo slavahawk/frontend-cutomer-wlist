@@ -118,6 +118,9 @@ updateActiveAccordion();
                   :sortOrder="-1"
                   tableStyle="min-width: 50rem"
                 >
+                  <template #empty
+                    ><span class="text-center">Вина отсутвуют</span></template
+                  >
                   <Column field="vintage" class="w-14">
                     <template #body="{ data }">
                       <span
@@ -170,6 +173,57 @@ updateActiveAccordion();
                     </template>
                   </Column>
                 </DataTable>
+                <div
+                  v-if="item.itemsGlass?.length"
+                  class="ml-auto mr-0 max-w-[600px]"
+                >
+                  <DataTable
+                    :value="item.itemsGlass"
+                    sortField="pricePerGlass"
+                    :sortOrder="-1"
+                  >
+                    <template #header>
+                      <span class="text-xl font-semibold">По бокалам</span>
+                    </template>
+                    <Column field="vintage" class="w-14">
+                      <template #body="{ data }">
+                        <span
+                          class="cursor-pointer"
+                          @click="showWineDetails(data, item)"
+                          >{{ vintage(data.wine.vintage) }}</span
+                        ></template
+                      >
+                    </Column>
+                    <Column field="name">
+                      <template #body="{ data }">
+                        <div
+                          class="cursor-pointer"
+                          @click="showWineDetails(data, item)"
+                        >
+                          <div>{{ data.wine.name }}</div>
+                          <div style="color: var(--p-primary-400)">
+                            {{ getCountryNameById(data.wine.countryId) }},
+                            {{ getRegionNameById(data.wine.regionId) }}
+                          </div>
+                        </div>
+                      </template>
+                    </Column>
+                    <Column
+                      field="pricePerGlass"
+                      header="Цена за бокал"
+                      sortable
+                      class="w-[200px]"
+                    >
+                      <template #body="{ data }">
+                        <WinePriceGlass
+                          :price-per-glass="data.pricePerGlass"
+                          :glass-volume="data?.glassVolume"
+                          @click="showWineDetails(data, item)"
+                        />
+                      </template>
+                    </Column>
+                  </DataTable>
+                </div>
               </AccordionContent>
             </AccordionPanel>
           </Accordion>
