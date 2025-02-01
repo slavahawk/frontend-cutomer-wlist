@@ -1,11 +1,13 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { RegionService, type Region } from "w-list-api";
+import { type Region, RegionService } from "w-list-api";
+import { handleError } from "@/utils/handleError.ts";
+import { useToast } from "primevue/usetoast";
 
 export const useRegionStore = defineStore("region", () => {
   const regions = ref<Region[]>([]);
   const loading = ref(false);
-  const error = ref<string | null>(null);
+  const toast = useToast();
 
   const regionOptions = computed(() => {
     return regions.value.map((region) => ({
@@ -14,32 +16,26 @@ export const useRegionStore = defineStore("region", () => {
     }));
   });
 
-
   const getRegionNameById = (regionId: number): string | null =>
-      regions.value.find((c: Region) => c.id === regionId)?.name ?? null;
+    regions.value.find((c: Region) => c.id === regionId)?.name ?? null;
 
   const fetchRegions = async () => {
     loading.value = true;
-    error.value = null;
 
     try {
       regions.value = await RegionService.getAll();
     } catch (err) {
-      error.value = "Ошибка при получении регионов. Попробуйте еще раз.";
-      console.error(err);
+      handleError(err, toast);
     } finally {
       loading.value = false;
     }
   };
 
-
-
   return {
     regions,
     regionOptions,
     loading,
-    error,
     fetchRegions,
-    getRegionNameById
+    getRegionNameById,
   };
 });

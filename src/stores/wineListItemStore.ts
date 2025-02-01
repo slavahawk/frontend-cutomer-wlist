@@ -7,10 +7,13 @@ import {
   type WineListItemRequest,
   WineListItemService,
 } from "w-list-api";
+import { useToast } from "primevue/usetoast";
+import { handleError } from "@/utils/handleError.ts";
 
 export const useWineListItemStore = defineStore("wineListItems", () => {
   const wineListItems = ref<WineListItemResponses>();
   const loading = ref(false);
+  const toast = useToast();
 
   // Utility function to set loading state
   const setLoading = (state: boolean) => {
@@ -26,7 +29,7 @@ export const useWineListItemStore = defineStore("wineListItems", () => {
     try {
       wineListItems.value = await WineListItemService.getAll(listId, params);
     } catch (error) {
-      console.error("Error fetching wine list items:", error);
+      handleError(error, toast);
     } finally {
       setLoading(false);
     }
@@ -38,7 +41,7 @@ export const useWineListItemStore = defineStore("wineListItems", () => {
     try {
       return await WineListItemService.getById(listId, id);
     } catch (error) {
-      console.error("Error fetching wine list item by ID:", error);
+      handleError(error, toast);
     } finally {
       setLoading(false);
     }
@@ -54,7 +57,7 @@ export const useWineListItemStore = defineStore("wineListItems", () => {
         return data;
       }
     } catch (error) {
-      console.error("Error creating wine list item:", error);
+      handleError(error, toast);
     } finally {
       setLoading(false);
     }
@@ -86,7 +89,7 @@ export const useWineListItemStore = defineStore("wineListItems", () => {
         return data;
       }
     } catch (error) {
-      console.error("Error updating wine list item:", error);
+      handleError(error, toast);
     } finally {
       setLoading(false);
     }
@@ -99,7 +102,7 @@ export const useWineListItemStore = defineStore("wineListItems", () => {
       await WineListItemService.delete(listId, itemId);
       removeWineListItem(itemId);
     } catch (error) {
-      console.error("Error deleting wine list item:", error);
+      handleError(error, toast);
     } finally {
       setLoading(false);
     }

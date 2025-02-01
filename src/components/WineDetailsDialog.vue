@@ -3,7 +3,7 @@
     <SliderComponent v-if="selectedWines" :slideTo="findIndex">
       <swiper-slide v-for="wine in selectedWines" :key="wine.id">
         <WineCard
-          :img="wine.wine.originalImagePath"
+          :img="imgSelect(wine.wine)"
           :name="wine.wine.name"
           :alcohol-by-volume="wine.wine.alcoholByVolume"
           :interesting-facts="wine.wine.interestingFacts"
@@ -17,15 +17,14 @@
           :region="regionNames[wine.wine.regionId]"
         >
           <p class="mb-4 flex gap-2 items-center">
-              <WinePriceGlass
-                :price-per-glass="wine.pricePerGlass"
-                :glass-volume="wine?.glassVolume"
-              />
-              <WinePriceBottle
-                :price-per-bottle="wine.pricePerBottle"
-                :bottle-volume="wine.wine.bottleVolume"
-              />
-              
+            <WinePriceGlass
+              :price-per-glass="wine.pricePerGlass"
+              :glass-volume="wine?.glassVolume"
+            />
+            <WinePriceBottle
+              :price-per-bottle="wine.pricePerBottle"
+              :bottle-volume="wine.wine.bottleVolume"
+            />
           </p>
         </WineCard>
       </swiper-slide>
@@ -41,6 +40,7 @@ import {
   getCategoryLabelByValue,
   getColourLabelByValue,
   getSugarTypeLabelByValue,
+  type Wine,
   type WineListItem,
 } from "w-list-api";
 import { useCountryStore } from "@/stores/countryStore.ts";
@@ -61,6 +61,12 @@ const props = defineProps<{
   selectedWines: WineListItem[];
   selectWineId: number;
 }>();
+
+const imgSelect = (wine: Wine) => {
+  return window.innerWidth >= 768
+    ? wine.originalImagePath
+    : wine.mediumImagePath;
+};
 
 // Получение имен сортов винограда для всех выбранных вин
 const grapesNames = computed(() => {

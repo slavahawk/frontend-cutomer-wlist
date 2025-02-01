@@ -5,10 +5,13 @@ import { useGrapeStore } from "@/stores/grapeStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
 import { useWineListStore } from "@/stores/wineListStore.ts";
 import { useAuthStore } from "@/stores/authStore.ts";
+import { handleError } from "@/utils/handleError.ts";
+import { useToast } from "primevue/usetoast";
 
 export const useAppInitStore = defineStore("appInit", () => {
   const isLoad = ref(true);
 
+  const toast = useToast();
   const { fetchCountries } = useCountryStore();
   const { fetchGrapes } = useGrapeStore();
   const { fetchRegions } = useRegionStore();
@@ -29,7 +32,7 @@ export const useAppInitStore = defineStore("appInit", () => {
         getActiveList(),
       ]);
     } catch (err) {
-      console.error("Ошибка при инициализации приложения:", err);
+      handleError(err, toast);
     } finally {
       isLoad.value = false;
     }
