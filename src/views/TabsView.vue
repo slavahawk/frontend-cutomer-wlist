@@ -142,7 +142,11 @@ updateActiveAccordion();
                       </div>
                     </template>
                   </Column>
-                  <Column field="pricePerGlass" class="w-[200px]">
+                  <Column
+                    field="pricePerGlass"
+                    class="w-[200px]"
+                    v-if="tab.title === glassItemsName"
+                  >
                     <template #body="{ data }">
                       <WinePriceGlass
                         :price-per-glass="data.pricePerGlass"
@@ -151,11 +155,7 @@ updateActiveAccordion();
                       />
                     </template>
                   </Column>
-                  <Column
-                    field="pricePerBottle"
-                    class="w-[200px]"
-                    v-if="tab.title !== glassItemsName"
-                  >
+                  <Column field="pricePerBottle" class="w-[200px]" v-else>
                     <template #body="{ data }">
                       <WinePriceBottle
                         :price-per-bottle="data.pricePerBottle"
