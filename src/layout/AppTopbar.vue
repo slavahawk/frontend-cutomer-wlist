@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { AppRoutes } from "@/router";
-import { useAuthStore } from "@/stores/authStore.ts";
-import { storeToRefs } from "pinia";
 import { useAppInitStore } from "@/stores/appInit.ts";
 
-const { user } = storeToRefs(useAuthStore());
 const { initApp, isLoad } = useAppInitStore();
 </script>
 

@@ -1,20 +1,15 @@
 import AppLayout from "@/layout/AppLayout.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import { useAuthStore } from "@/stores/authStore";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
 
 export enum AppRoutes {
   MAIN = "Main",
-  LOGIN = "Login",
   TABS = "Tabs",
-  WINES = "Wines",
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
-  [AppRoutes.MAIN]: "/",
-  [AppRoutes.LOGIN]: "/auth",
-  [AppRoutes.TABS]: "/tabs",
-  [AppRoutes.WINES]: "/wines",
+  [AppRoutes.MAIN]: "/:id",
+  [AppRoutes.TABS]: "/:id/tabs",
 };
 
 const router = createRouter({
@@ -28,7 +23,6 @@ const router = createRouter({
           path: RoutePath.Main,
           name: AppRoutes.MAIN,
           component: () => import("@/views/Main.vue"),
-          meta: { requiresAuth: true },
         },
         {
           path: "/",
@@ -38,13 +32,6 @@ const router = createRouter({
               path: RoutePath.Tabs,
               name: AppRoutes.TABS,
               component: () => import("@/views/TabsView.vue"),
-              meta: { requiresAuth: true },
-            },
-            {
-              path: RoutePath.Wines,
-              name: AppRoutes.WINES,
-              component: () => import("@/views/Wines.vue"),
-              meta: { requiresAuth: true },
             },
           ],
         },
@@ -56,29 +43,16 @@ const router = createRouter({
       name: "notfound",
       component: () => import("@/views/NotFound.vue"),
     },
-
-    {
-      path: RoutePath.Login,
-      name: AppRoutes.LOGIN,
-      component: () => import("@/views/Login.vue"),
-    },
   ],
 });
-
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  // Обновляем состояние аутентификации
-  authStore.checkAuth();
-
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!authStore.isAuthenticated) {
-      next({ name: AppRoutes.LOGIN });
-    } else {
-      next();
-    }
-  } else {
-    next();
-  }
-});
+//
+// router.beforeEach((to, from, next) => {
+//   console.log(!to.params?.id);
+//   //
+//   // if (!to.params?.id) {
+//   //   // next("/1");
+//   //   return;
+//   // }
+// });
 
 export default router;
