@@ -11,7 +11,6 @@ import { useRoute } from "vue-router";
 export const useAppInitStore = defineStore("appInit", () => {
   const isLoad = ref(true);
   const route = useRoute();
-
   const toast = useToast();
   const { fetchCountries } = useCountryStore();
   const { fetchGrapes } = useGrapeStore();

@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
-import HomeView from "@/views/HomeView.vue";
 
 export enum AppRoutes {
   MAIN = "Main",
@@ -22,7 +21,7 @@ const router = createRouter({
     {
       path: RoutePath[AppRoutes.HOME], // Переименуем path "/home" в "/"
       name: AppRoutes.HOME,
-      component: HomeView, // Используем отдельный компонент HomeView для страницы("/")
+      component: () => import("@/views/HomeView.vue"), // Используем отдельный компонент HomeView для страницы("/")
     },
     {
       path: "/:id",

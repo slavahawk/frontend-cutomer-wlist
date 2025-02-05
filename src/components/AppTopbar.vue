@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { AppRoutes } from "@/router";
 import { useAppInitStore } from "@/stores/appInit.ts";
+import { storeToRefs } from "pinia";
 
-const { initApp, isLoad } = useAppInitStore();
+const { initApp } = useAppInitStore();
+const { isLoad } = storeToRefs(useAppInitStore());
 </script>
 
 <template>
