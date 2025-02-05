@@ -21,14 +21,17 @@ export const useAppInitStore = defineStore("appInit", () => {
   const initApp = async () => {
     try {
       isLoad.value = true;
-      //
-      // await getMe(); // Ждем получения данных о пользователе
-      await fetchRegions();
+
+      const data = await getActiveList(+route.params.id);
+
+      if (!data) {
+        return window.location.replace("https://w-list.ru/");
+      }
       // Ждем завершения всех запросов
       await Promise.allSettled([
+        fetchRegions(),
         fetchGrapes(),
         fetchCountries(),
-        getActiveList(+route.params.id),
       ]);
     } catch (err) {
       handleError(err, toast);

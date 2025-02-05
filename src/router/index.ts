@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
-import HomeView from "@/views/HomeView.vue"; // Добавлен отдельный компонент для страницы "/"
+import HomeView from "@/views/HomeView.vue";
 
 export enum AppRoutes {
   MAIN = "Main",
@@ -46,6 +46,15 @@ const router = createRouter({
       component: () => import("@/views/NotFound.vue"),
     },
   ],
+});
+router.beforeEach((to, from, next) => {
+  if (to.name === AppRoutes.HOME) {
+    // Используем window.location.replace() для редиректа на внешний URL
+    window.location.replace("https://w-list.ru/");
+    // next() не нужен, так как мы выполняем редирект
+  } else {
+    next(); // Продолжаем навигацию для остальных маршрутов
+  }
 });
 
 export default router;

@@ -1,10 +1,7 @@
 <template>
-  <div class="HomeView">HOME</div>
+  <div>
+    <h1>Страница главная</h1>
+  </div>
 </template>
 
-<script setup lang="ts"></script>
-
-<style scoped lang="scss">
-.HomeView {
-}
-</style>
+<script setup></script>
