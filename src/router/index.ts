@@ -1,58 +1,51 @@
-import AppLayout from "@/layout/AppLayout.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
+import HomeView from "@/views/HomeView.vue"; // Добавлен отдельный компонент для страницы "/"
 
 export enum AppRoutes {
   MAIN = "Main",
   TABS = "Tabs",
+  HOME = "Home",
+  NOT_FOUND = "Not Found",
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.MAIN]: "/:id",
   [AppRoutes.TABS]: "/:id/tabs",
+  [AppRoutes.HOME]: "/", // Используем "/:id" в path
+  [AppRoutes.NOT_FOUND]: "/:pathMatch(.*)*",
 };
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: "/",
-      component: DefaultLayout,
+      path: RoutePath[AppRoutes.HOME], // Переименуем path "/home" в "/"
+      name: AppRoutes.HOME,
+      component: HomeView, // Используем отдельный компонент HomeView для страницы("/")
+    },
+    {
+      path: "/:id",
+      component: DefaultLayout, // Используем AppLayout для страницы "/:id"
       children: [
         {
-          path: RoutePath.Main,
+          path: RoutePath[AppRoutes.MAIN],
           name: AppRoutes.MAIN,
-          component: () => import("@/views/Main.vue"),
+          component: () => import("@/views/MainView.vue"),
         },
         {
-          path: "/",
-          component: AppLayout,
-          children: [
-            {
-              path: RoutePath.Tabs,
-              name: AppRoutes.TABS,
-              component: () => import("@/views/TabsView.vue"),
-            },
-          ],
+          path: RoutePath[AppRoutes.TABS],
+          name: AppRoutes.TABS,
+          component: () => import("@/views/TabsView.vue"),
         },
       ],
     },
-
     {
-      path: "/:pathMatch(.*)*",
-      name: "notfound",
+      path: RoutePath[AppRoutes.NOT_FOUND],
+      name: AppRoutes.NOT_FOUND,
       component: () => import("@/views/NotFound.vue"),
     },
   ],
 });
-//
-// router.beforeEach((to, from, next) => {
-//   console.log(!to.params?.id);
-//   //
-//   // if (!to.params?.id) {
-//   //   // next("/1");
-//   //   return;
-//   // }
-// });
 
 export default router;

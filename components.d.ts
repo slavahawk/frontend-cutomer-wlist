@@ -11,6 +11,7 @@ declare module 'vue' {
     AccordionContent: typeof import('primevue/accordioncontent')['default']
     AccordionHeader: typeof import('primevue/accordionheader')['default']
     AccordionPanel: typeof import('primevue/accordionpanel')['default']
+    AppTopbar: typeof import('./src/components/AppTopbar.vue')['default']
     Button: typeof import('primevue/button')['default']
     CardTab: typeof import('./src/components/CardTab.vue')['default']
     CardWine: typeof import('./src/components/Wine/CardWine.vue')['default']
