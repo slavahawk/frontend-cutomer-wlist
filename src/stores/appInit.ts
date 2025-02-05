@@ -11,7 +11,6 @@ import { useRoute } from "vue-router";
 export const useAppInitStore = defineStore("appInit", () => {
   const isLoad = ref(true);
   const route = useRoute();
-
   const toast = useToast();
   const { fetchCountries } = useCountryStore();
   const { fetchGrapes } = useGrapeStore();
@@ -20,20 +19,30 @@ export const useAppInitStore = defineStore("appInit", () => {
 
   const initApp = async () => {
     try {
+      console.log("Initializing app...");
       isLoad.value = true;
-      //
-      // await getMe(); // Ждем получения данных о пользователе
-      await fetchRegions();
-      // Ждем завершения всех запросов
+
+      const data = await getActiveList(+route.params.id);
+      console.log("Fetched active list:", data);
+
+      if (!data) {
+        console.error("No active data found, redirecting.");
+        return window.location.replace("https://w-list.ru/");
+      }
+
       await Promise.allSettled([
+        fetchRegions(),
         fetchGrapes(),
         fetchCountries(),
-        getActiveList(+route.params.id),
-      ]);
+      ]).then((results) => {
+        console.log("Fetch results:", results); // Log results for debugging
+      });
     } catch (err) {
+      console.error("Error during app initialization:", err);
       handleError(err, toast);
     } finally {
       isLoad.value = false;
+      console.log("App initialization complete.");
     }
   };
 

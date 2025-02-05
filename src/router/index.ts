@@ -1,58 +1,59 @@
-import AppLayout from "@/layout/AppLayout.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
 
 export enum AppRoutes {
   MAIN = "Main",
   TABS = "Tabs",
+  HOME = "Home",
+  NOT_FOUND = "Not Found",
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.MAIN]: "/:id",
   [AppRoutes.TABS]: "/:id/tabs",
+  [AppRoutes.HOME]: "/", // Используем "/:id" в path
+  [AppRoutes.NOT_FOUND]: "/:pathMatch(.*)*",
 };
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: "/",
-      component: DefaultLayout,
+      path: RoutePath[AppRoutes.HOME], // Переименуем path "/home" в "/"
+      name: AppRoutes.HOME,
+      component: () => import("@/views/HomeView.vue"), // Используем отдельный компонент HomeView для страницы("/")
+    },
+    {
+      path: "/:id",
+      component: DefaultLayout, // Используем AppLayout для страницы "/:id"
       children: [
         {
-          path: RoutePath.Main,
+          path: RoutePath[AppRoutes.MAIN],
           name: AppRoutes.MAIN,
-          component: () => import("@/views/Main.vue"),
+          component: () => import("@/views/MainView.vue"),
         },
         {
-          path: "/",
-          component: AppLayout,
-          children: [
-            {
-              path: RoutePath.Tabs,
-              name: AppRoutes.TABS,
-              component: () => import("@/views/TabsView.vue"),
-            },
-          ],
+          path: RoutePath[AppRoutes.TABS],
+          name: AppRoutes.TABS,
+          component: () => import("@/views/TabsView.vue"),
         },
       ],
     },
-
     {
-      path: "/:pathMatch(.*)*",
-      name: "notfound",
+      path: RoutePath[AppRoutes.NOT_FOUND],
+      name: AppRoutes.NOT_FOUND,
       component: () => import("@/views/NotFound.vue"),
     },
   ],
 });
-//
-// router.beforeEach((to, from, next) => {
-//   console.log(!to.params?.id);
-//   //
-//   // if (!to.params?.id) {
-//   //   // next("/1");
-//   //   return;
-//   // }
-// });
+router.beforeEach((to, from, next) => {
+  if (to.name === AppRoutes.HOME) {
+    // Используем window.location.replace() для редиректа на внешний URL
+    window.location.replace("https://w-list.ru/");
+    // next() не нужен, так как мы выполняем редирект
+  } else {
+    next(); // Продолжаем навигацию для остальных маршрутов
+  }
+});
 
 export default router;

@@ -1,3 +1,126 @@
+<template>
+  <div
+    v-if="isLoad"
+    class="layout-wrapper relative flex justify-center items-center"
+  >
+    <ProgressSpinner
+      class="spinner"
+      strokeWidth="8"
+      fill="transparent"
+      animationDuration=".5s"
+      aria-label="Custom ProgressSpinner"
+    />
+  </div>
+  <div v-else class="layout-wrapper">
+    <app-topbar></app-topbar>
+    <div class="layout-main-container">
+      <div class="layout-main">
+        <div class="card !p-0 customBlock">
+          <Tabs v-model:value="activeTab" scrollable>
+            <TabList>
+              <Tab
+                v-for="(tab, index) in tabContent"
+                :key="index"
+                :value="index"
+              >
+                {{ tab.title }}
+              </Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel
+                v-for="(tab, index) in tabContent"
+                :key="index"
+                :value="index"
+              >
+                <Accordion v-model:value="activeAccordion" multiple>
+                  <AccordionPanel
+                    :value="key"
+                    v-for="(item, key) in tab.items"
+                    :key="key"
+                  >
+                    <AccordionHeader>
+                      <div class="text-2xl font-semibold flex gap-2">
+                        <span style="color: var(--primary-color)">
+                          {{ getNamingKey(key, tab) }}
+                        </span>
+                      </div>
+                    </AccordionHeader>
+                    <AccordionContent>
+                      <DataTable
+                        :value="item.items"
+                        tableStyle="min-width: 50rem"
+                      >
+                        <template #empty
+                          ><span class="text-center"
+                            >Вина отсутвуют</span
+                          ></template
+                        >
+                        <Column field="vintage" class="w-14">
+                          <template #body="{ data }">
+                            <span
+                              class="cursor-pointer"
+                              @click="showWineDetails(data, item)"
+                              >{{ vintage(data.wine.vintage) }}</span
+                            ></template
+                          >
+                        </Column>
+                        <Column field="name">
+                          <template #body="{ data }">
+                            <div
+                              class="cursor-pointer"
+                              @click="showWineDetails(data, item)"
+                            >
+                              <div>{{ data.wine.name }}</div>
+                              <div style="color: var(--p-primary-400)">
+                                {{ getCountryNameById(data.wine.countryId) }},
+                                {{ getRegionNameById(data.wine.regionId) }}
+                              </div>
+                            </div>
+                          </template>
+                        </Column>
+                        <Column
+                          field="pricePerGlass"
+                          class="w-[200px]"
+                          v-if="tab.title === glassItemsName"
+                        >
+                          <template #body="{ data }">
+                            <WinePriceGlass
+                              :price-per-glass="data.pricePerGlass"
+                              :glass-volume="data?.glassVolume"
+                              @click="showWineDetails(data, item)"
+                            />
+                          </template>
+                        </Column>
+                        <Column field="pricePerBottle" class="w-[200px]" v-else>
+                          <template #body="{ data }">
+                            <WinePriceBottle
+                              :price-per-bottle="data.pricePerBottle"
+                              :bottle-volume="data.wine.bottleVolume"
+                              @click="showWineDetails(data, item)"
+                            />
+                          </template>
+                        </Column>
+                      </DataTable>
+                    </AccordionContent>
+                  </AccordionPanel>
+                </Accordion>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+
+          <div v-if="selectedWines">
+            <WineDetailsDialog
+              v-model:show="showDetails"
+              :selectedWines="selectedWines"
+              :selectWineId="selectWineId"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import WineDetailsDialog from "@/components/WineDetailsDialog.vue";
 import { AppRoutes } from "@/router";
@@ -5,7 +128,6 @@ import { useCountryStore } from "@/stores/countryStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
 import { computed, ref, watch } from "vue";
 import { useWineListStore } from "@/stores/wineListStore.ts";
-import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import {
   getCategoryLabelByValue,
@@ -15,6 +137,11 @@ import {
 } from "w-list-api";
 import { WinePriceBottle, WinePriceGlass } from "w-list-components";
 import { vintage } from "w-list-utils";
+import AppTopbar from "@/components/AppTopbar.vue";
+import { storeToRefs } from "pinia";
+import { useAppInitStore } from "@/stores/appInit.ts";
+
+const { isLoad } = storeToRefs(useAppInitStore());
 
 const { getRegionNameById } = useRegionStore();
 const { getCountryNameById } = useCountryStore();
@@ -86,101 +213,6 @@ const initActiveTab = () => {
 initActiveTab();
 updateActiveAccordion();
 </script>
-
-<template>
-  <div class="card !p-0 customBlock">
-    <Tabs v-model:value="activeTab" scrollable>
-      <TabList>
-        <Tab v-for="(tab, index) in tabContent" :key="index" :value="index">
-          {{ tab.title }}
-        </Tab>
-      </TabList>
-      <TabPanels>
-        <TabPanel
-          v-for="(tab, index) in tabContent"
-          :key="index"
-          :value="index"
-        >
-          <Accordion v-model:value="activeAccordion" multiple>
-            <AccordionPanel
-              :value="key"
-              v-for="(item, key) in tab.items"
-              :key="key"
-            >
-              <AccordionHeader>
-                <div class="text-2xl font-semibold flex gap-2">
-                  <span style="color: var(--primary-color)">
-                    {{ getNamingKey(key, tab) }}
-                  </span>
-                </div>
-              </AccordionHeader>
-              <AccordionContent>
-                <DataTable :value="item.items" tableStyle="min-width: 50rem">
-                  <template #empty
-                    ><span class="text-center">Вина отсутвуют</span></template
-                  >
-                  <Column field="vintage" class="w-14">
-                    <template #body="{ data }">
-                      <span
-                        class="cursor-pointer"
-                        @click="showWineDetails(data, item)"
-                        >{{ vintage(data.wine.vintage) }}</span
-                      ></template
-                    >
-                  </Column>
-                  <Column field="name">
-                    <template #body="{ data }">
-                      <div
-                        class="cursor-pointer"
-                        @click="showWineDetails(data, item)"
-                      >
-                        <div>{{ data.wine.name }}</div>
-                        <div style="color: var(--p-primary-400)">
-                          {{ getCountryNameById(data.wine.countryId) }},
-                          {{ getRegionNameById(data.wine.regionId) }}
-                        </div>
-                      </div>
-                    </template>
-                  </Column>
-                  <Column
-                    field="pricePerGlass"
-                    class="w-[200px]"
-                    v-if="tab.title === glassItemsName"
-                  >
-                    <template #body="{ data }">
-                      <WinePriceGlass
-                        :price-per-glass="data.pricePerGlass"
-                        :glass-volume="data?.glassVolume"
-                        @click="showWineDetails(data, item)"
-                      />
-                    </template>
-                  </Column>
-                  <Column field="pricePerBottle" class="w-[200px]" v-else>
-                    <template #body="{ data }">
-                      <WinePriceBottle
-                        :price-per-bottle="data.pricePerBottle"
-                        :bottle-volume="data.wine.bottleVolume"
-                        @click="showWineDetails(data, item)"
-                      />
-                    </template>
-                  </Column>
-                </DataTable>
-              </AccordionContent>
-            </AccordionPanel>
-          </Accordion>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
-
-    <div v-if="selectedWines">
-      <WineDetailsDialog
-        v-model:show="showDetails"
-        :selectedWines="selectedWines"
-        :selectWineId="selectWineId"
-      />
-    </div>
-  </div>
-</template>
 
 <style scoped lang="scss">
 .square {
