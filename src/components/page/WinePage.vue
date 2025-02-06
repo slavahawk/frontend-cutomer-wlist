@@ -198,13 +198,6 @@ initActiveTab();
 updateActiveAccordion();
 </script>
 
-<style scoped lang="scss">
-.square {
-  width: 100%;
-  aspect-ratio: 1;
-}
-</style>
-
 <style>
 .customBlock {
   .p-accordionheader {

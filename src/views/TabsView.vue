@@ -1,17 +1,19 @@
 <template>
-  <div
-    v-if="isLoad"
-    class="layout-wrapper relative flex justify-center items-center"
-  >
-    <ProgressSpinner
-      class="spinner"
-      strokeWidth="8"
-      fill="transparent"
-      animationDuration=".5s"
-      aria-label="Custom ProgressSpinner"
-    />
+  <div>
+    <div
+      v-if="isLoad"
+      class="layout-wrapper relative flex justify-center items-center"
+    >
+      <ProgressSpinner
+        class="spinner"
+        strokeWidth="8"
+        fill="transparent"
+        animationDuration=".5s"
+        aria-label="Custom ProgressSpinner"
+      />
+    </div>
+    <WinePage v-else />
   </div>
-  <WinePage v-else />
 </template>
 
 <script setup lang="ts">
