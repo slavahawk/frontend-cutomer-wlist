@@ -1,7 +1,7 @@
 <template>
   <Drawer v-model:visible="isVisible" header=" " position="full">
     <SliderComponent v-if="selectedWines" :slideTo="findIndex">
-      <swiper-slide v-for="wine in selectedWines" :key="wine.id">
+      <swiper-slide v-for="wine in selectedWines" :key="wine.id" lazy>
         <WineCard
           :img="imgSelect(wine.wine)"
           :name="wine.wine.name"

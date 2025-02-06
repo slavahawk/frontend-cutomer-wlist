@@ -4,6 +4,7 @@
     init="false"
     effect="cards"
     class="mySwiper"
+    virtual
   >
     <slot />
   </swiper-container>
@@ -30,10 +31,6 @@ onMounted(() => {
 
   const params = {
     modules: [EffectCards],
-    cardsEffect: {
-      perSlideOffset: 20, // Space between cards in px
-      perSlideRotate: 1, // Rotation of cards in degrees
-    },
   };
   Object.assign(swiperEl, params);
 
