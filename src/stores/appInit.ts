@@ -19,21 +19,15 @@ export const useAppInitStore = defineStore("appInit", () => {
 
   const initApp = async () => {
     try {
-      const data = await getActiveList(+route.params.id);
-
-      if (!data) {
-        window.location.replace("https://w-list.ru/");
-      }
-
-      const results = Promise.all([
+      await Promise.all([
         fetchRegions(),
         fetchGrapes(),
         fetchCountries(),
+        getActiveList(+route.params.id),
       ]);
-
-      await results;
     } catch (err) {
       handleError(err, toast);
+      window.location.replace("https://w-list.ru/");
     } finally {
       isLoad.value = false;
     }

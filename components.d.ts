@@ -33,5 +33,6 @@ declare module 'vue' {
     Tabs: typeof import('primevue/tabs')['default']
     Toast: typeof import('primevue/toast')['default']
     WineDetailsDialog: typeof import('./src/components/WineDetailsDialog.vue')['default']
+    WinePage: typeof import('./src/components/page/WinePage.vue')['default']
   }
 }
