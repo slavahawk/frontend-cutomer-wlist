@@ -63,9 +63,7 @@ const props = defineProps<{
 }>();
 
 const imgSelect = (wine: Wine) => {
-  return window.innerWidth >= 768
-    ? wine.originalImagePath
-    : wine.mediumImagePath;
+  return window.innerWidth >= 768 ? wine.originalImagePath : wine.tinyImagePath;
 };
 
 // Получение имен сортов винограда для всех выбранных вин
