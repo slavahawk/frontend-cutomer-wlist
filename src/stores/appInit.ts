@@ -19,30 +19,23 @@ export const useAppInitStore = defineStore("appInit", () => {
 
   const initApp = async () => {
     try {
-      console.log("Initializing app...");
-      isLoad.value = true;
-
       const data = await getActiveList(+route.params.id);
-      console.log("Fetched active list:", data);
 
       if (!data) {
-        console.error("No active data found, redirecting.");
-        return window.location.replace("https://w-list.ru/");
+        window.location.replace("https://w-list.ru/");
       }
 
-      await Promise.allSettled([
+      const results = Promise.all([
         fetchRegions(),
         fetchGrapes(),
         fetchCountries(),
-      ]).then((results) => {
-        console.log("Fetch results:", results); // Log results for debugging
-      });
+      ]);
+
+      await results;
     } catch (err) {
-      console.error("Error during app initialization:", err);
       handleError(err, toast);
     } finally {
       isLoad.value = false;
-      console.log("App initialization complete.");
     }
   };
 

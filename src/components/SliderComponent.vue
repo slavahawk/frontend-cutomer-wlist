@@ -4,7 +4,6 @@
     init="false"
     effect="cards"
     class="mySwiper"
-    virtual
   >
     <slot />
   </swiper-container>
