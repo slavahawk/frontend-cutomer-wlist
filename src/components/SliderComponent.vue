@@ -30,7 +30,10 @@ onMounted(() => {
 
   const params = {
     modules: [EffectCards],
-    // inject modules styles to shadow DOM
+    cardsEffect: {
+      perSlideOffset: 20, // Space between cards in px
+      perSlideRotate: 1, // Rotation of cards in degrees
+    },
   };
   Object.assign(swiperEl, params);
 

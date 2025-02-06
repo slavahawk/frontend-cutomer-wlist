@@ -125,4 +125,8 @@ const isVisible = computed({
     background: white !important;
   }
 }
+
+.p-drawer-content {
+  overflow: hidden !important;
+}
 </style>
