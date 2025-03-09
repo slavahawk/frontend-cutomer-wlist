@@ -46,14 +46,14 @@ const router = createRouter({
     },
   ],
 });
-router.beforeEach((to, from, next) => {
-  if (to.name === AppRoutes.HOME) {
-    // Используем window.location.replace() для редиректа на внешний URL
-    window.location.replace("https://w-list.ru/");
-    // next() не нужен, так как мы выполняем редирект
-  } else {
-    next(); // Продолжаем навигацию для остальных маршрутов
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   // if (to.name === AppRoutes.HOME) {
+//   //   // Используем window.location.replace() для редиректа на внешний URL
+//   //   window.location.replace("https://w-list.ru/");
+//   //   // next() не нужен, так как мы выполняем редирект
+//   // } else {
+//   //   next(); // Продолжаем навигацию для остальных маршрутов
+//   // }
+// });
 
 export default router;

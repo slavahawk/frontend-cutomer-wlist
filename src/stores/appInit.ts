@@ -15,15 +15,18 @@ export const useAppInitStore = defineStore("appInit", () => {
   const { fetchCountries } = useCountryStore();
   const { fetchGrapes } = useGrapeStore();
   const { fetchRegions } = useRegionStore();
-  const { getActiveList } = useWineListStore();
+  const { getActiveListBottle, getActiveListGlass } = useWineListStore();
 
   const initApp = async () => {
     try {
-      const data = await getActiveList(+route.params.id);
+      const [glass, bottle] = await Promise.all([
+        getActiveListGlass(+route.params.id),
+        getActiveListBottle(+route.params.id),
+      ]);
 
-      if (!data) {
-        window.location.replace("https://w-list.ru/");
-      }
+      // if (!data) {
+      //   window.location.replace("https://w-list.ru/");
+      // }
 
       const results = Promise.all([
         fetchRegions(),

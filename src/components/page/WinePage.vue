@@ -129,7 +129,8 @@ import AppTopbar from "@/components/AppTopbar.vue";
 import { storeToRefs } from "pinia";
 const { getRegionNameById } = useRegionStore();
 const { getCountryNameById } = useCountryStore();
-const { activeWineList } = storeToRefs(useWineListStore());
+const { activeWineListBottle, activeWineListGlass } =
+  storeToRefs(useWineListStore());
 
 const glassItemsName = "По бокалам";
 const categoryName = "Категории";
@@ -150,13 +151,13 @@ const namingFunctions = {
 };
 
 const tabContent = computed(() => [
-  { title: glassItemsName, items: activeWineList.value?.glassItems },
-  { title: categoryName, items: activeWineList.value?.categories },
-  { title: countryName, items: activeWineList.value?.countries },
-  { title: grapesName, items: activeWineList.value?.grapes },
-  { title: regionName, items: activeWineList.value?.regions },
-  { title: sugarTypename, items: activeWineList.value?.sugarTypes },
-  { title: colourName, items: activeWineList.value?.colours },
+  { title: glassItemsName, items: activeWineListGlass.value?.categories },
+  { title: categoryName, items: activeWineListBottle.value?.categories },
+  { title: countryName, items: activeWineListBottle.value?.countries },
+  { title: grapesName, items: activeWineListBottle.value?.grapes },
+  { title: regionName, items: activeWineListBottle.value?.regions },
+  { title: sugarTypename, items: activeWineListBottle.value?.sugarTypes },
+  { title: colourName, items: activeWineListBottle.value?.colours },
 ]);
 
 const getNamingKey = (key: any, item: any) => {

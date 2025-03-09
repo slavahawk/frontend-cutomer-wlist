@@ -2,7 +2,6 @@
   <swiper-container
     :initialSlide="props.slideTo"
     init="false"
-    effect="cards"
     class="mySwiper"
     virtual
   >
