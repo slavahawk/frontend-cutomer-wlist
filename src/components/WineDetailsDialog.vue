@@ -1,5 +1,10 @@
 <template>
-  <Drawer v-model:visible="isVisible" header=" " position="full">
+  <Drawer
+    v-model:visible="isVisible"
+    header=" "
+    position="full"
+    class="drawerCustom"
+  >
     <SliderComponent v-if="selectedWines" :slideTo="findIndex">
       <swiper-slide v-for="wine in selectedWines" :key="wine.id" lazy>
         <WineCard
@@ -63,7 +68,9 @@ const props = defineProps<{
 }>();
 
 const imgSelect = (wine: Wine) => {
-  return window.innerWidth >= 768 ? wine.originalImagePath : wine.tinyImagePath;
+  return window.innerWidth >= 768
+    ? wine.originalImagePath
+    : wine.mediumImagePath;
 };
 
 // Получение имен сортов винограда для всех выбранных вин
@@ -116,17 +123,19 @@ const isVisible = computed({
 </script>
 
 <style lang="scss">
-.p-drawer {
+.drawerCustom {
   background: none !important;
-}
 
-.p-drawer-header {
-  button {
-    background: white !important;
+  .p-drawer-header {
+    padding: 0.5rem 1.25rem !important;
+    button {
+      background: white !important;
+    }
   }
-}
 
-.p-drawer-content {
-  overflow: hidden !important;
+  .p-drawer-content {
+    overflow: hidden !important;
+    padding: 0 0 var(--p-overlay-modal-padding) 0 !important;
+  }
 }
 </style>

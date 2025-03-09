@@ -4,6 +4,9 @@
     init="false"
     class="mySwiper"
     virtual
+    :slides-per-view="1.15"
+    :centeredSlides="true"
+    :space-between="20"
   >
     <slot />
   </swiper-container>
@@ -40,8 +43,9 @@ onMounted(() => {
 <style lang="scss">
 .mySwiper {
   width: 100%;
-  max-width: 800px;
-  height: 86vh;
+  //max-width: 800px;
+  //height: 86vh;
+  height: 100%;
   margin: 0 auto;
 
   swiper-slide {
@@ -49,9 +53,6 @@ onMounted(() => {
     justify-content: center;
     border-radius: 18px;
     background: var(--surface-card);
-    box-shadow:
-      0 8px 16px 0 var(--primary-contrast-color),
-      0 6px 20px 0 rgba(0, 0, 0, 0.19);
     padding: 24px;
   }
 }

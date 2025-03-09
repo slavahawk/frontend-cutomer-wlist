@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { AppRoutes } from "@/router";
 import { useAppInitStore } from "@/stores/appInit.ts";
-import { storeToRefs } from "pinia";
+import { ref } from "vue";
 
 const { initApp } = useAppInitStore();
-const { isLoad } = storeToRefs(useAppInitStore());
+const isLoad = ref(false);
+const clickInitApp = async () => {
+  isLoad.value = true;
+  await initApp();
+  isLoad.value = false;
+};
 </script>
 
 <template>
@@ -19,7 +24,7 @@ const { isLoad } = storeToRefs(useAppInitStore());
         severity="secondary"
         icon="pi pi-refresh"
         :loading="isLoad"
-        @click="initApp"
+        @click="clickInitApp"
       />
     </div>
     <div class="layout-topbar-actions">

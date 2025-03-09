@@ -18,13 +18,14 @@ export const useAppInitStore = defineStore("appInit", () => {
   const { getActiveListBottle, getActiveListGlass } = useWineListStore();
 
   const initApp = async () => {
+    // isLoad.value = true;
     try {
       const [glass, bottle] = await Promise.all([
         getActiveListGlass(+route.params.id),
         getActiveListBottle(+route.params.id),
       ]);
 
-      if (!glass) {
+      if (!glass && !bottle) {
         window.location.replace("https://w-list.ru/");
       }
 
