@@ -24,9 +24,9 @@ export const useAppInitStore = defineStore("appInit", () => {
         getActiveListBottle(+route.params.id),
       ]);
 
-      // if (!data) {
-      //   window.location.replace("https://w-list.ru/");
-      // }
+      if (!glass) {
+        window.location.replace("https://w-list.ru/");
+      }
 
       const results = Promise.all([
         fetchRegions(),
