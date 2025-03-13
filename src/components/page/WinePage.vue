@@ -133,7 +133,7 @@ const { activeWineListBottle, activeWineListGlass } =
   storeToRefs(useWineListStore());
 
 const glassItemsName = "По бокалам";
-const categoryName = "Категории";
+const categoryName = "По бутылкам";
 const countryName = "Страны";
 const grapesName = "Виноград";
 const regionName = "Регионы";
@@ -142,7 +142,7 @@ const colourName = "Цвет";
 
 const namingFunctions = {
   "По бокалам": getCategoryLabelByValue,
-  Категории: getCategoryLabelByValue,
+  "По бутылкам": getCategoryLabelByValue,
   Страны: (key: any) => getCountryNameById(+key),
   Виноград: (key: any) => key,
   Регионы: (key: any) => getRegionNameById(+key),
