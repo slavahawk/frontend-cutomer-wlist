@@ -1,15 +1,8 @@
 <script setup lang="ts">
 import { AppRoutes } from "@/router";
-import { useAppInitStore } from "@/stores/appInit.ts";
-import { ref } from "vue";
-
-const { initApp } = useAppInitStore();
-const isLoad = ref(false);
-const clickInitApp = async () => {
-  isLoad.value = true;
-  await initApp();
-  isLoad.value = false;
-};
+import { useActiveInfo } from "@/stores/activeInfo.ts";
+import { storeToRefs } from "pinia";
+const { info } = storeToRefs(useActiveInfo());
 </script>
 
 <template>
@@ -19,16 +12,9 @@ const clickInitApp = async () => {
         icon="pi pi-arrow-circle-left"
         @click="$router.push({ name: AppRoutes.MAIN })"
       />
-      <Button
-        class="ml-4"
-        severity="secondary"
-        icon="pi pi-refresh"
-        :loading="isLoad"
-        @click="clickInitApp"
-      />
     </div>
     <div class="layout-topbar-actions">
-      <!--      {{ user?.email }}-->
+      {{ info?.shopName }}
     </div>
   </div>
 </template>

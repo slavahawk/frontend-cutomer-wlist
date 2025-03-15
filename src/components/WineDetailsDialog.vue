@@ -5,41 +5,41 @@
     position="full"
     class="drawerCustom"
   >
-    <SliderComponent v-if="selectedWines" :slideTo="findIndex">
-      <swiper-slide v-for="wine in selectedWines" :key="wine.id" lazy>
+    <swiper-container
+      class="mySwiper"
+      ref="swiperContainer"
+      :initialSlide="findIndex"
+      :slides-per-view="1.2"
+      :centeredSlides="true"
+      :space-between="20"
+      :virtual="true"
+    >
+      <swiper-slide
+        v-for="(wine, index) in selectedWines"
+        :key="wine.id"
+        :virtual-index="index"
+      >
         <WineCard
           :img="imgSelect(wine.wine)"
           :name="wine.wine.name"
-          :alcohol-by-volume="wine.wine.alcoholByVolume"
-          :interesting-facts="wine.wine.interestingFacts"
-          :organoleptic="wine.wine.organoleptic"
-          :vintage="vintage(wine.wine.vintage)"
-          :grapes="grapesNames[wine.id]"
-          :sugar-type="getSugarTypeLabelByValue(wine.wine.sugarType)"
           :country="countryNames[wine.wine.countryId]"
+          :region="regionNames[wine.wine.regionId]"
+          :grapes="getGrapesNameById(wine.wine.grapeIds)"
+          :interestingFacts="wine.wine.interestingFacts"
+          :vintage="vintage(wine.wine.vintage)"
           :category="getCategoryLabelByValue(wine.wine.category)"
           :colour="getColourLabelByValue(wine.wine.colour)"
-          :region="regionNames[wine.wine.regionId]"
-        >
-          <p class="mb-4 flex gap-2 items-center">
-            <WinePriceGlass
-              :price-per-glass="wine.pricePerGlass"
-              :glass-volume="wine?.glassVolume"
-            />
-            <WinePriceBottle
-              :price-per-bottle="wine.pricePerBottle"
-              :bottle-volume="wine.wine.bottleVolume"
-            />
-          </p>
-        </WineCard>
+          :alcoholByVolume="wine.wine.alcoholByVolume"
+          :sugarType="getSugarTypeLabelByValue(wine.wine.sugarType)"
+          :organoleptic="wine.wine.organoleptic"
+        />
       </swiper-slide>
-    </SliderComponent>
+    </swiper-container>
   </Drawer>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import { WineCard, WinePriceBottle, WinePriceGlass } from "w-list-components";
+import { computed, nextTick, ref, watch } from "vue";
 import { vintage } from "w-list-utils";
 import {
   getCategoryLabelByValue,
@@ -50,8 +50,14 @@ import {
 } from "w-list-api";
 import { useCountryStore } from "@/stores/countryStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
-import SliderComponent from "@/components/SliderComponent.vue";
 import { useGrapeStore } from "@/stores/grapeStore.ts";
+import { register } from "swiper/element";
+import { WineCard } from "w-list-components";
+
+// Register Swiper elements
+register();
+
+const swiperContainer = ref<HTMLElement | null>(null);
 
 const { getCountryNameById } = useCountryStore();
 const { getRegionNameById } = useRegionStore();
@@ -67,51 +73,43 @@ const props = defineProps<{
   selectWineId: number;
 }>();
 
-const imgSelect = (wine: Wine) => {
-  return window.innerWidth >= 768
-    ? wine.originalImagePath
-    : wine.mediumImagePath;
-};
+// Helper function to get img based on screen size
+const imgSelect = (wine: Wine) =>
+  window.innerWidth >= 768 ? wine.originalImagePath : wine.mediumImagePath;
 
-// Получение имен сортов винограда для всех выбранных вин
-const grapesNames = computed(() => {
-  return props.selectedWines.reduce(
-    (acc, wine) => {
-      acc[wine.id] = getGrapesNameById(wine.wine.grapeIds);
-      return acc;
-    },
-    {} as Record<number, string | null>,
-  );
-});
-
-// Получение имен стран для всех выбранных вин
+// Computed properties for wine information
 const countryNames = computed(() => {
-  return props.selectedWines.reduce(
-    (acc, wine) => {
-      acc[wine.wine.countryId] = getCountryNameById(wine.wine.countryId);
-      return acc;
-    },
-    {} as Record<number, string | null>,
-  );
+  return getNamesById(props.selectedWines, getCountryNameById, "countryId");
 });
 
-// Получение имен регионов для всех выбранных вин
 const regionNames = computed(() => {
-  return props.selectedWines.reduce(
+  return getNamesById(props.selectedWines, getRegionNameById, "regionId");
+});
+
+// Helper function to generate names by IDs
+function getNamesById(
+  wines: WineListItem[],
+  getNameFn: (id: number) => string | null,
+  idKey: string,
+) {
+  return wines.reduce(
     (acc, wine) => {
-      acc[wine.wine.regionId] = getRegionNameById(wine.wine.regionId);
+      acc[wine.wine[idKey]] = getNameFn(wine.wine[idKey]);
       return acc;
     },
     {} as Record<number, string | null>,
   );
-});
+}
 
+// Find index of the selected wine
 const findIndex = computed(() => {
-  return props.selectedWines.findIndex(
-    (w: WineListItem) => w.id === props.selectWineId,
+  const index = props.selectedWines.findIndex(
+    (w) => w.id === props.selectWineId,
   );
+  return index !== -1 ? index : 0; // Default to 0 if not found
 });
 
+// Handle Drawer visibility and Swiper initialization
 const isVisible = computed({
   get() {
     return props.show;
@@ -120,6 +118,28 @@ const isVisible = computed({
     emit("update:show", value);
   },
 });
+
+// Watch for visibility change to initialize Swiper
+watch(
+  () => isVisible.value,
+  async (val) => {
+    if (val) {
+      await nextTick();
+      if (swiperContainer.value) {
+        const swiper = swiperContainer.value.swiper;
+
+        if (swiper) {
+          // Update Swiper with the new slides
+          swiper.update();
+        } else {
+          console.error("Swiper instance not found");
+        }
+      } else {
+        console.error("Swiper element not found");
+      }
+    }
+  },
+);
 </script>
 
 <style lang="scss">
@@ -128,6 +148,7 @@ const isVisible = computed({
 
   .p-drawer-header {
     padding: 0.5rem 1.25rem !important;
+
     button {
       background: white !important;
     }
@@ -135,7 +156,21 @@ const isVisible = computed({
 
   .p-drawer-content {
     overflow: hidden !important;
-    padding: 0 0 var(--p-overlay-modal-padding) 0 !important;
+    padding: 0 0 var(--p-overlay-modal-padding) !important;
+  }
+}
+
+.mySwiper {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+
+  swiper-slide {
+    display: flex;
+    justify-content: center;
+    border-radius: 18px;
+    background: var(--surface-card);
+    padding: 24px;
   }
 }
 </style>

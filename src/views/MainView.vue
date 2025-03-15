@@ -1,12 +1,22 @@
 <template>
-  <div class="mainBanner" @click="$router.push({ name: AppRoutes.TABS })">
-    <img :src="MainBanner" class="bgExampleClass" alt="Main" />
+  <div class="mainBanner" @click="router.push({ name: AppRoutes.TABS })">
+    <img
+      :src="info?.imagePath || MainBanner"
+      class="bgExampleClass"
+      alt="Main"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { AppRoutes } from "@/router";
 import MainBanner from "@/assets/images/main.png";
+import { useActiveInfo } from "@/stores/activeInfo.ts";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const { info } = storeToRefs(useActiveInfo());
 </script>
 
 <style scoped lang="scss">
