@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { initializeAuth } from "w-list-api";
-import TestAge from "@/components/testAge.vue";
+import DialogAge from "@/components/DialogAge.vue";
 // import PWABadge from "@/components/PWABadge.vue";
 
 initializeAuth();
@@ -11,7 +11,7 @@ initializeAuth();
     <router-view />
   </Suspense>
   <Toast />
-  <TestAge />
+  <DialogAge />
   <!--  <PWABadge />-->
 </template>
 
