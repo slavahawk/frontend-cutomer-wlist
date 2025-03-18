@@ -1,6 +1,8 @@
 <template>
   <div class="mainBanner" @click="router.push({ name: AppRoutes.TABS })">
+    <ProgressSpinner v-if="loading" />
     <img
+      v-else
       :src="info?.imagePath || MainBanner"
       class="bgExampleClass"
       alt="Main"
@@ -16,7 +18,7 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const { info } = storeToRefs(useActiveInfo());
+const { info, loading } = storeToRefs(useActiveInfo());
 </script>
 
 <style scoped lang="scss">

@@ -4,13 +4,7 @@
       v-if="isLoad"
       class="layout-wrapper relative flex justify-center items-center"
     >
-      <ProgressSpinner
-        class="spinner"
-        strokeWidth="8"
-        fill="transparent"
-        animationDuration=".5s"
-        aria-label="Custom ProgressSpinner"
-      />
+      <ProgressSpinner />
     </div>
     <WinePage v-else />
   </div>
