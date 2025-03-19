@@ -8,15 +8,18 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Accordion: typeof import('primevue/accordion')['default']
+    Accordion: typeof import('./src/components/Accordion.vue')['default']
     AccordionContent: typeof import('primevue/accordioncontent')['default']
     AccordionHeader: typeof import('primevue/accordionheader')['default']
+    AccordionItem: typeof import('./src/components/AccordionItem.vue')['default']
     AccordionPanel: typeof import('primevue/accordionpanel')['default']
     AppTopbar: typeof import('./src/components/AppTopbar.vue')['default']
     Button: typeof import('primevue/button')['default']
     CardTab: typeof import('./src/components/CardTab.vue')['default']
     CardWine: typeof import('./src/components/Wine/CardWine.vue')['default']
     Column: typeof import('primevue/column')['default']
+    CustomAccordion: typeof import('./src/components/CustomAccordion.vue')['default']
+    CustomAccordionItem: typeof import('./src/components/CustomAccordionItem.vue')['default']
     DataTable: typeof import('primevue/datatable')['default']
     Dialog: typeof import('primevue/dialog')['default']
     DialogAge: typeof import('./src/components/DialogAge.vue')['default']
@@ -35,6 +38,7 @@ declare module 'vue' {
     Tabs: typeof import('primevue/tabs')['default']
     TestAge: typeof import('./src/components/testAge.vue')['default']
     Toast: typeof import('primevue/toast')['default']
+    WineDataTable: typeof import('./src/components/WineDataTable.vue')['default']
     WineDetailsDialog: typeof import('./src/components/WineDetailsDialog.vue')['default']
     WinePage: typeof import('./src/components/page/WinePage.vue')['default']
   }

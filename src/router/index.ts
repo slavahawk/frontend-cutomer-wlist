@@ -1,31 +1,34 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
 
+// Определение маршрутов приложения
 export enum AppRoutes {
   MAIN = "Main",
   TABS = "Tabs",
   HOME = "Home",
-  NOT_FOUND = "Not Found",
+  NOT_FOUND = "NotFound", // Убрал пробел для единообразия
 }
 
+// Определение пути для каждого маршрута
 export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.MAIN]: "/:id",
   [AppRoutes.TABS]: "/:id/tabs",
-  [AppRoutes.HOME]: "/", // Используем "/:id" в path
+  [AppRoutes.HOME]: "/",
   [AppRoutes.NOT_FOUND]: "/:pathMatch(.*)*",
 };
 
+// Создание экземпляра роутера
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: RoutePath[AppRoutes.HOME], // Переименуем path "/home" в "/"
+      path: RoutePath[AppRoutes.HOME],
       name: AppRoutes.HOME,
-      component: () => import("@/views/HomeView.vue"), // Используем отдельный компонент HomeView для страницы("/")
+      component: () => import("@/views/HomeView.vue"),
     },
     {
       path: "/:id",
-      component: DefaultLayout, // Используем AppLayout для страницы "/:id"
+      component: DefaultLayout,
       children: [
         {
           path: RoutePath[AppRoutes.MAIN],
