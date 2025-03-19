@@ -8,11 +8,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Accordion: typeof import('./src/components/Accordion.vue')['default']
-    AccordionContent: typeof import('primevue/accordioncontent')['default']
-    AccordionHeader: typeof import('primevue/accordionheader')['default']
-    AccordionItem: typeof import('./src/components/AccordionItem.vue')['default']
-    AccordionPanel: typeof import('primevue/accordionpanel')['default']
     AppTopbar: typeof import('./src/components/AppTopbar.vue')['default']
     Button: typeof import('primevue/button')['default']
     CardTab: typeof import('./src/components/CardTab.vue')['default']
@@ -36,7 +31,6 @@ declare module 'vue' {
     TabPanel: typeof import('primevue/tabpanel')['default']
     TabPanels: typeof import('primevue/tabpanels')['default']
     Tabs: typeof import('primevue/tabs')['default']
-    TestAge: typeof import('./src/components/testAge.vue')['default']
     Toast: typeof import('primevue/toast')['default']
     WineDataTable: typeof import('./src/components/WineDataTable.vue')['default']
     WineDetailsDialog: typeof import('./src/components/WineDetailsDialog.vue')['default']
