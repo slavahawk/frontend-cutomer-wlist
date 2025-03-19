@@ -3,9 +3,10 @@
     <ProgressSpinner v-if="loading" />
     <img
       v-else
-      :src="info?.imagePath || MainBanner"
+      :src="currentImagePath"
       class="bgExampleClass"
       alt="Main"
+      @error="onImageError"
     />
   </div>
 </template>
@@ -16,9 +17,22 @@ import MainBanner from "@/assets/images/main.png";
 import { useActiveInfo } from "@/stores/activeInfo.ts";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import { ref, watch } from "vue";
 
 const router = useRouter();
 const { info, loading } = storeToRefs(useActiveInfo());
+
+const currentImagePath = ref("");
+
+watch(info, (val) => {
+  if (val?.imagePath) {
+    currentImagePath.value = val?.imagePath;
+  }
+});
+
+const onImageError = () => {
+  currentImagePath.value = MainBanner; // Fallback to the main image if the load fails
+};
 </script>
 
 <style scoped lang="scss">
