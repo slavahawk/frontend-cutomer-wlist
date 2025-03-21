@@ -18,7 +18,7 @@
       <div class="card-content">
         <p><strong>Категория:</strong> {{ wine.category }}</p>
         <p><strong>Цвет:</strong> {{ wine.colour }}</p>
-        <p><strong>Тип сахара:</strong> {{ wine.sugarType }}</p>
+        <p><strong>Уровень сахара:</strong> {{ wine.sugarType }}</p>
         <p><strong>Объем бутылки:</strong> {{ wine.bottleVolume }} л</p>
         <p><strong>Алкоголь:</strong> {{ roundedAlcohol }}%</p>
       </div>

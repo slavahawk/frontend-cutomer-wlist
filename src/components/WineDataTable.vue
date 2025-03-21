@@ -5,20 +5,14 @@
     </template>
     <Column field="vintage" class="w-14">
       <template #body="{ data }">
-        <span
-          @click="$emit('item-click', { allWines: items, selectWine: data })"
-          class="cursor-pointer"
-        >
+        <span @click="handleItemClick(data)" class="cursor-pointer">
           {{ vintage(data.wine.vintage) }}
         </span>
       </template>
     </Column>
     <Column field="name">
       <template #body="{ data }">
-        <div
-          @click="$emit('item-click', { allWines: items, selectWine: data })"
-          class="cursor-pointer"
-        >
+        <div @click="handleItemClick(data)" class="cursor-pointer">
           <div>{{ data.wine.name }}</div>
           <div style="color: var(--p-primary-400)">
             {{ getCountryNameById(data.wine.countryId) }},
@@ -34,18 +28,19 @@
     >
       <template #body="{ data }">
         <WinePriceGlass
-          :price-per-glass="data.pricePerGlass"
+          :price-per-glass="data?.pricePerGlass"
           :glass-volume="data?.glassVolume"
-          @click="$emit('item-click', { allWines: items, selectWine: data })"
+          @click="handleItemClick(data)"
         />
       </template>
     </Column>
     <Column field="pricePerBottle" class="w-[200px]" v-else>
       <template #body="{ data }">
         <WinePriceBottle
+          v-if="data.pricePerBottle"
           :price-per-bottle="data.pricePerBottle"
           :bottle-volume="data.wine.bottleVolume"
-          @click="$emit('item-click', { allWines: items, selectWine: data })"
+          @click="handleItemClick(data)"
         />
       </template>
     </Column>
@@ -53,9 +48,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
 import { type WineListItem } from "w-list-api";
-import { WinePriceBottle, WinePriceGlass } from "w-list-components";
+
 import { vintage } from "w-list-utils";
 import { useCountryStore } from "@/stores/countryStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
@@ -65,8 +59,16 @@ const { getRegionNameById } = useRegionStore();
 
 const props = defineProps<{
   items: WineListItem[];
-  title: string;
+  title?: string;
 }>();
+
+const emit = defineEmits<{
+  (e: "item-click", data: any): void;
+}>();
+
+const handleItemClick = (data: WineListItem) => {
+  emit("item-click", { allWines: props.items, selectWine: data });
+};
 </script>
 
 <style lang="scss">

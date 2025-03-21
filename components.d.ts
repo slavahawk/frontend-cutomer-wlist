@@ -8,6 +8,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Accordion: typeof import('primevue/accordion')['default']
+    AccordionContent: typeof import('primevue/accordioncontent')['default']
+    AccordionHeader: typeof import('primevue/accordionheader')['default']
+    AccordionPanel: typeof import('primevue/accordionpanel')['default']
     AppTopbar: typeof import('./src/components/AppTopbar.vue')['default']
     Button: typeof import('primevue/button')['default']
     CardTab: typeof import('./src/components/CardTab.vue')['default']
@@ -15,6 +19,7 @@ declare module 'vue' {
     Column: typeof import('primevue/column')['default']
     CustomAccordion: typeof import('./src/components/CustomAccordion.vue')['default']
     CustomAccordionItem: typeof import('./src/components/CustomAccordionItem.vue')['default']
+    CustomTabs: typeof import('./src/components/CustomTabs.vue')['default']
     DataTable: typeof import('primevue/datatable')['default']
     Dialog: typeof import('primevue/dialog')['default']
     DialogAge: typeof import('./src/components/DialogAge.vue')['default']

@@ -12,7 +12,6 @@ import { register } from "swiper/element/bundle";
 
 const app = createApp(App);
 
-
 app.use(createPinia());
 app.use(router);
 app.use(PrimeVue, primeVueOptions);
@@ -20,4 +19,3 @@ app.use(ToastService);
 app.use(ConfirmationService);
 register();
 app.mount("#app");
-

@@ -6,7 +6,7 @@ export enum AppRoutes {
   MAIN = "Main",
   TABS = "Tabs",
   HOME = "Home",
-  NOT_FOUND = "NotFound", // Убрал пробел для единообразия
+  NOT_FOUND = "NotFound",
 }
 
 // Определение пути для каждого маршрута

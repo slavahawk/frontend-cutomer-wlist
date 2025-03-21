@@ -32,7 +32,18 @@
           :alcoholByVolume="wine.wine.alcoholByVolume"
           :sugarType="getSugarTypeLabelByValue(wine.wine.sugarType)"
           :organoleptic="wine.wine.organoleptic"
-        />
+        >
+          <p class="mb-4 flex gap-2 items-center">
+            <WinePriceGlass
+              :price-per-glass="wine.pricePerGlass"
+              :glass-volume="wine?.glassVolume"
+            />
+            <WinePriceBottle
+              :price-per-bottle="wine.pricePerBottle"
+              :bottle-volume="wine.wine.bottleVolume"
+            />
+          </p>
+        </WineCard>
       </swiper-slide>
     </swiper-container>
   </Drawer>
@@ -52,7 +63,7 @@ import { useCountryStore } from "@/stores/countryStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
 import { useGrapeStore } from "@/stores/grapeStore.ts";
 import { register } from "swiper/element";
-import { WineCard } from "w-list-components";
+import { WineCard, WinePriceGlass, WinePriceBottle } from "w-list-components";
 
 // Register Swiper elements
 register();

@@ -1,14 +1,21 @@
 <template>
   <div>
-    <div @click="toggle" class="accordion-header" :class="{ active: isOpen }">
+    <div
+      @click="toggle"
+      class="accordion-header"
+      :class="{ active: isOpen }"
+      v-if="false"
+    >
       <slot name="header"></slot>
       <Button
         :icon="isOpen ? 'pi pi-arrow-circle-down' : 'pi pi-arrow-circle-up'"
         variant="text"
       />
     </div>
-    <div v-if="isOpen" class="accordion-content" :class="{ active: isOpen }">
-      <slot name="content"></slot>
+    <div v-if="false">
+      <div v-if="isOpen" class="accordion-content" :class="{ active: isOpen }">
+        <slot name="content"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -16,7 +23,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const isOpen = ref(true);
+const isOpen = ref(false);
 
 const toggle = () => {
   isOpen.value = !isOpen.value;
