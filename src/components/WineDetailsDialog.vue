@@ -28,6 +28,7 @@
           :interestingFacts="wine.wine.interestingFacts"
           :vintage="vintage(wine.wine.vintage)"
           :category="getCategoryLabelByValue(wine.wine.category)"
+          :category-id="wine.wine.category"
           :colour="getColourLabelByValue(wine.wine.colour)"
           :alcoholByVolume="wine.wine.alcoholByVolume"
           :sugarType="getSugarTypeLabelByValue(wine.wine.sugarType)"
