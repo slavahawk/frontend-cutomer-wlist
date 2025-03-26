@@ -34,12 +34,14 @@
           :sugarType="getSugarTypeLabelByValue(wine.wine.sugarType)"
           :organoleptic="wine.wine.organoleptic"
         >
-          <p class="mb-4 flex gap-2 items-center">
+          <p class="mb-4 flex gap-x-2 gap-y-4 items-center flex-wrap">
             <WinePriceGlass
+              class="winePriceCustom"
               :price-per-glass="wine.pricePerGlass"
               :glass-volume="wine?.glassVolume"
             />
             <WinePriceBottle
+              class="winePriceCustom"
               :price-per-bottle="wine.pricePerBottle"
               :bottle-volume="wine.wine.bottleVolume"
             />
@@ -168,6 +170,15 @@ watch(
   .p-drawer-content {
     overflow: hidden !important;
     padding: 0 0 var(--p-overlay-modal-padding) !important;
+  }
+}
+
+.winePriceCustom {
+  span {
+    font-size: 1.2rem;
+  }
+  sub {
+    font-size: 0.8rem;
   }
 }
 
