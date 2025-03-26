@@ -1,6 +1,7 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { CountryService, type Country } from "w-list-api";
+import { CountryService } from "w-list-api";
+import { type Country } from "wlist-types";
 import { handleError } from "@/utils/handleError.ts";
 import { useToast } from "primevue/usetoast";
 

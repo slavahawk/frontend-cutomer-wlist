@@ -1,8 +1,10 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { type ActiveListInfo, ActiveWineListService } from "w-list-api";
+import { ActiveWineListService } from "w-list-api";
+import { type ActiveListInfo } from "wlist-types";
 import { useToast } from "primevue/usetoast";
 import { handleError } from "@/utils/handleError.ts"; // Путь к сервису управления списками вин
+import { checkData } from "w-list-utils";
 
 export const useActiveInfo = defineStore("info", () => {
   const info = ref<ActiveListInfo | null>(null);
@@ -14,6 +16,7 @@ export const useActiveInfo = defineStore("info", () => {
 
     try {
       const data = await ActiveWineListService.getActiveListInfo(shopId);
+      checkData(data);
       info.value = data;
       return data;
     } catch (err) {

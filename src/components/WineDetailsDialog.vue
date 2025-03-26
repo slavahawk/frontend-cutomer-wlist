@@ -56,9 +56,8 @@ import {
   getCategoryLabelByValue,
   getColourLabelByValue,
   getSugarTypeLabelByValue,
-  type Wine,
-  type WineListItem,
 } from "w-list-api";
+import { type Wine, type WineListItem } from "wlist-types";
 import { useCountryStore } from "@/stores/countryStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
 import { useGrapeStore } from "@/stores/grapeStore.ts";

@@ -46,6 +46,7 @@
                         <Column field="vintage" class="w-14">
                           <template #body="{ data }">
                             <span
+                              v-if="showVintage(data.category)"
                               class="cursor-pointer"
                               @click="showWineDetails(data, item)"
                               >{{ vintage(data.wine.vintage) }}</span
@@ -121,10 +122,10 @@ import {
   getCategoryLabelByValue,
   getColourLabelByValue,
   getSugarTypeLabelByValue,
-  type WineListItem,
 } from "w-list-api";
+import { type WineListItem } from "wlist-types";
 import { WinePriceBottle, WinePriceGlass } from "w-list-components";
-import { vintage } from "w-list-utils";
+import { vintage, showVintage } from "w-list-utils";
 import AppTopbar from "@/components/AppTopbar.vue";
 import { storeToRefs } from "pinia";
 const { getRegionNameById } = useRegionStore();

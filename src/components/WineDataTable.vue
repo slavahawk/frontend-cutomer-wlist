@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { type WineListItem } from "w-list-api";
+import { type WineListItem } from "wlist-types";
 
 import { vintage } from "w-list-utils";
 import { useCountryStore } from "@/stores/countryStore.ts";
