@@ -1,6 +1,6 @@
 <template>
   <div class="layout-wrapper">
-    <app-topbar></app-topbar>
+    <AppTopbar></AppTopbar>
     <div class="layout-main-container">
       <div class="layout-main">
         <div class="card !p-0 customBlock">
@@ -75,6 +75,7 @@ import { type WineListItem } from "wlist-types";
 import { storeToRefs } from "pinia";
 import { useGrapeStore } from "@/stores/grapeStore.ts";
 import WineDataTable from "@/components/WineDataTable.vue";
+import AppTopbar from "@/components/AppTopbar.vue";
 
 const { getCountryNameById } = useCountryStore();
 const { getRegionNameById } = useRegionStore();
