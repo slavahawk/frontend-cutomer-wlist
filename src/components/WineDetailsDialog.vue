@@ -24,7 +24,7 @@
           :name="wine.wine.name"
           :country="countryNames[wine.wine.countryId]"
           :region="regionNames[wine.wine.regionId]"
-          :grapes="getGrapesNameById(wine.wine.grapeIds)"
+          :grapes="getGrapesNameById(wine.wine.grapeData)"
           :interestingFacts="wine.wine.interestingFacts"
           :vintage="vintage(wine.wine.vintage)"
           :category="getCategoryLabelByValue(wine.wine.category)"

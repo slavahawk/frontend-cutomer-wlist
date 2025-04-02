@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { GrapeService } from "w-list-api";
-import { type Grape } from "wlist-types";
+import { type Grape, type GrapeData } from "wlist-types";
 import { handleError } from "@/utils/handleError.ts";
 import { useToast } from "primevue/usetoast";
 
@@ -19,10 +19,19 @@ export const useGrapeStore = defineStore("grape", () => {
     }));
   });
 
-  const getGrapesNameById = (grapeIds: number[]): string[] => {
-    return grapeIds
-      .map((id) => grapes.value.find((g: Grape) => g.id === id)?.name ?? null)
+  const getGrapesNameById = (grapeData: GrapeData[]): string[] => {
+    return grapeData
+      .map(
+        (grapeD) =>
+          grapes.value.find((g: Grape) => g.id === grapeD.grapeId)?.name ??
+          null,
+      )
       .filter((name) => name !== null);
+  };
+
+  const getGrapeNameById = (grapeId: number): string => {
+    const grape = grapes.value.find((g: Grape) => g.id === grapeId);
+    return grape?.name || "";
   };
 
   const fetchGrapes = async () => {
@@ -49,5 +58,6 @@ export const useGrapeStore = defineStore("grape", () => {
     fetchGrapes,
     clearSelectedGrape,
     getGrapesNameById,
+    getGrapeNameById,
   };
 });

@@ -15,81 +15,29 @@
               </Tab>
             </TabList>
             <TabPanels>
-              <TabPanel
-                v-for="(tab, index) in tabContent"
-                :key="index"
-                :value="index"
-              >
+              <TabPanel v-if="activeTabData" :value="activeTabData.value">
                 <Accordion v-model:value="activeAccordion" multiple>
                   <AccordionPanel
-                    :value="key"
-                    v-for="(item, key) in tab.items"
+                    v-for="(item, key) in activeTabData.items"
                     :key="key"
+                    :value="key"
                   >
                     <AccordionHeader>
                       <div class="text-2xl font-semibold flex gap-2">
                         <span style="color: var(--primary-color)">
-                          {{ getNamingKey(key, tab) }}
+                          {{ getNamingKey(key, activeTabData.title) }}
                         </span>
                       </div>
                     </AccordionHeader>
                     <AccordionContent>
-                      <DataTable
-                        :value="item.items"
-                        tableStyle="min-width: 50rem"
-                      >
-                        <template #empty
-                          ><span class="text-center"
-                            >Вина отсутвуют</span
-                          ></template
-                        >
-                        <Column field="vintage" class="w-14">
-                          <template #body="{ data }">
-                            <span
-                              v-if="showVintage(data.category)"
-                              class="cursor-pointer"
-                              @click="showWineDetails(data, item)"
-                              >{{ vintage(data.wine.vintage) }}</span
-                            ></template
-                          >
-                        </Column>
-                        <Column field="name">
-                          <template #body="{ data }">
-                            <div
-                              class="cursor-pointer"
-                              @click="showWineDetails(data, item)"
-                            >
-                              <div>{{ data.wine.name }}</div>
-                              <div style="color: var(--p-primary-400)">
-                                {{ getCountryNameById(data.wine.countryId) }},
-                                {{ getRegionNameById(data.wine.regionId) }}
-                              </div>
-                            </div>
-                          </template>
-                        </Column>
-                        <Column
-                          field="pricePerGlass"
-                          class="w-[200px]"
-                          v-if="tab.title === glassItemsName"
-                        >
-                          <template #body="{ data }">
-                            <WinePriceGlass
-                              :price-per-glass="data.pricePerGlass"
-                              :glass-volume="data?.glassVolume"
-                              @click="showWineDetails(data, item)"
-                            />
-                          </template>
-                        </Column>
-                        <Column field="pricePerBottle" class="w-[200px]" v-else>
-                          <template #body="{ data }">
-                            <WinePriceBottle
-                              :price-per-bottle="data.pricePerBottle"
-                              :bottle-volume="data.wine.bottleVolume"
-                              @click="showWineDetails(data, item)"
-                            />
-                          </template>
-                        </Column>
-                      </DataTable>
+                      <WineDataTable
+                        v-if="activeAccordion.includes(key)"
+                        :data="item.data"
+                        :isGlass="activeTabData.title === glassItemsName"
+                        @showWineDetails="
+                          (id) => showWineDetails(id, item.data)
+                        "
+                      />
                     </AccordionContent>
                   </AccordionPanel>
                 </Accordion>
@@ -97,13 +45,12 @@
             </TabPanels>
           </Tabs>
 
-          <div v-if="selectedWines">
-            <WineDetailsDialog
-              v-model:show="showDetails"
-              :selectedWines="selectedWines"
-              :selectWineId="selectWineId"
-            />
-          </div>
+          <WineDetailsDialog
+            v-if="selectedWines"
+            v-model:show="showDetails"
+            :selectedWines="selectedWines"
+            :selectWineId="selectWineId"
+          />
         </div>
       </div>
     </div>
@@ -124,12 +71,14 @@ import {
   getSugarTypeLabelByValue,
 } from "w-list-api";
 import { type WineListItem } from "wlist-types";
-import { WinePriceBottle, WinePriceGlass } from "w-list-components";
-import { vintage, showVintage } from "w-list-utils";
-import AppTopbar from "@/components/AppTopbar.vue";
+
 import { storeToRefs } from "pinia";
-const { getRegionNameById } = useRegionStore();
+import { useGrapeStore } from "@/stores/grapeStore.ts";
+import WineDataTable from "@/components/WineDataTable.vue";
+
 const { getCountryNameById } = useCountryStore();
+const { getRegionNameById } = useRegionStore();
+const { getGrapeNameById } = useGrapeStore();
 const { activeWineListBottle, activeWineListGlass } =
   storeToRefs(useWineListStore());
 
@@ -142,27 +91,45 @@ const sugarTypename = "Тип сахара";
 const colourName = "Цвет";
 
 const namingFunctions = {
-  "По бокалам": getCategoryLabelByValue,
-  "По бутылкам": getCategoryLabelByValue,
-  Страны: (key: any) => getCountryNameById(+key),
-  Виноград: (key: any) => key,
-  Регионы: (key: any) => getRegionNameById(+key),
-  "Тип сахара": getSugarTypeLabelByValue,
-  Цвет: getColourLabelByValue,
+  [glassItemsName]: getCategoryLabelByValue,
+  [categoryName]: getCategoryLabelByValue,
+  [countryName]: (key: any) => getCountryNameById(+key),
+  [grapesName]: (key: any) => getGrapeNameById(+key),
+  [regionName]: (key: any) => getRegionNameById(+key),
+  [sugarTypename]: getSugarTypeLabelByValue,
+  [colourName]: getColourLabelByValue,
 };
 
 const tabContent = computed(() => [
-  { title: glassItemsName, items: activeWineListGlass.value?.categories },
-  { title: categoryName, items: activeWineListBottle.value?.categories },
-  { title: countryName, items: activeWineListBottle.value?.countries },
-  { title: grapesName, items: activeWineListBottle.value?.grapes },
-  { title: regionName, items: activeWineListBottle.value?.regions },
-  { title: sugarTypename, items: activeWineListBottle.value?.sugarTypes },
-  { title: colourName, items: activeWineListBottle.value?.colours },
+  {
+    title: glassItemsName,
+    items: activeWineListGlass.value?.categories,
+    value: 0,
+  },
+  {
+    title: categoryName,
+    items: activeWineListBottle.value?.categories,
+    value: 1,
+  },
+  {
+    title: countryName,
+    items: activeWineListBottle.value?.countries,
+    value: 2,
+  },
+  { title: grapesName, items: activeWineListBottle.value?.grapes, value: 3 },
+  { title: regionName, items: activeWineListBottle.value?.regions, value: 4 },
+  {
+    title: sugarTypename,
+    items: activeWineListBottle.value?.sugarTypes,
+    value: 5,
+  },
+  { title: colourName, items: activeWineListBottle.value?.colours, value: 6 },
 ]);
 
-const getNamingKey = (key: any, item: any) => {
-  const namingFunction = namingFunctions[item.title];
+const activeTabData = computed(() => tabContent.value[activeTab.value]);
+
+const getNamingKey = (key: number, title: string) => {
+  const namingFunction = namingFunctions[title];
   return namingFunction ? namingFunction(key) : key;
 };
 
@@ -170,9 +137,9 @@ const showDetails = ref(false);
 const selectWineId = ref<number | null>(null);
 const selectedWines = ref<WineListItem[] | null>(null);
 
-const showWineDetails = (data: any, item: any) => {
-  selectWineId.value = data.id;
-  selectedWines.value = item.items;
+const showWineDetails = (id: number, item: WineListItem[]) => {
+  selectWineId.value = id;
+  selectedWines.value = item;
   showDetails.value = true;
 };
 
@@ -183,7 +150,19 @@ const route = useRoute();
 
 const updateActiveAccordion = () => {
   const selectedTab = tabContent.value[activeTab.value];
-  activeAccordion.value = Object.keys(selectedTab?.items || {});
+
+  // Создаем массив для хранения ключей, которые удовлетворяют условию
+  const keysToAdd = [];
+
+  // Проверяем каждую категорию, чтобы определить, добавлять ли ее
+  for (const [key, item] of Object.entries(selectedTab?.items || {})) {
+    if (item.count <= 50) {
+      keysToAdd.push(key);
+    }
+  }
+
+  // Обновляем активный аккордеон только с подходящими ключами
+  activeAccordion.value = keysToAdd;
 };
 
 watch(activeTab, () => {

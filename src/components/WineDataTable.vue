@@ -1,18 +1,22 @@
 <template>
-  <DataTable :value="items" tableStyle="min-width: 50rem" class="TableCustom">
+  <DataTable :value="data" tableStyle="min-width: 50rem">
     <template #empty>
       <span class="text-center">Вина отсутствуют</span>
     </template>
     <Column field="vintage" class="w-14">
       <template #body="{ data }">
-        <span @click="handleItemClick(data)" class="cursor-pointer">
+        <span
+          v-if="showVintage(data.category)"
+          class="cursor-pointer"
+          @click="emit('showWineDetails', data.id)"
+        >
           {{ vintage(data.wine.vintage) }}
         </span>
       </template>
     </Column>
     <Column field="name">
       <template #body="{ data }">
-        <div @click="handleItemClick(data)" class="cursor-pointer">
+        <div class="cursor-pointer" @click="emit('showWineDetails', data.id)">
           <div>{{ data.wine.name }}</div>
           <div style="color: var(--p-primary-400)">
             {{ getCountryNameById(data.wine.countryId) }},
@@ -21,26 +25,21 @@
         </div>
       </template>
     </Column>
-    <Column
-      field="pricePerGlass"
-      class="w-[200px]"
-      v-if="title === 'По бокалам'"
-    >
+    <Column v-if="isGlass" field="pricePerGlass" class="w-[200px]">
       <template #body="{ data }">
         <WinePriceGlass
-          :price-per-glass="data?.pricePerGlass"
+          :price-per-glass="data.pricePerGlass"
           :glass-volume="data?.glassVolume"
-          @click="handleItemClick(data)"
+          @click="emit('showWineDetails', data.id)"
         />
       </template>
     </Column>
-    <Column field="pricePerBottle" class="w-[200px]" v-else>
+    <Column v-else field="pricePerBottle" class="w-[200px]">
       <template #body="{ data }">
         <WinePriceBottle
-          v-if="data.pricePerBottle"
           :price-per-bottle="data.pricePerBottle"
           :bottle-volume="data.wine.bottleVolume"
-          @click="handleItemClick(data)"
+          @click="emit('showWineDetails', data.id)"
         />
       </template>
     </Column>
@@ -48,33 +47,22 @@
 </template>
 
 <script setup lang="ts">
+import { defineProps } from "vue";
 import { type WineListItem } from "wlist-types";
-
-import { vintage } from "w-list-utils";
+import { WinePriceBottle, WinePriceGlass } from "w-list-components";
+import { showVintage, vintage } from "w-list-utils";
 import { useCountryStore } from "@/stores/countryStore.ts";
 import { useRegionStore } from "@/stores/regionStore.ts";
 
 const { getCountryNameById } = useCountryStore();
 const { getRegionNameById } = useRegionStore();
 
-const props = defineProps<{
-  items: WineListItem[];
-  title?: string;
+defineProps<{
+  data: WineListItem[];
+  isGlass: boolean;
 }>();
 
 const emit = defineEmits<{
-  (e: "item-click", data: any): void;
+  (e: "showWineDetails", id: number): void;
 }>();
-
-const handleItemClick = (data: WineListItem) => {
-  emit("item-click", { allWines: props.items, selectWine: data });
-};
 </script>
-
-<style lang="scss">
-.TableCustom {
-  .p-datatable-header-cell {
-    padding: 0 !important;
-  }
-}
-</style>
