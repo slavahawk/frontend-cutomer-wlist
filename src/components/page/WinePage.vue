@@ -152,25 +152,13 @@ const router = useRouter();
 const route = useRoute();
 
 const updateActiveAccordion = () => {
-  if (info.value && info.value.itemCount < 50) {
-    const selectedTab = tabContent.value[activeTab.value];
-
-    // Все
+  activeAccordion.value = [];
+  const selectedTab = tabContent.value[activeTab.value];
+  if (
+    activeTabData.value.title === glassItemsName ||
+    (info.value && info.value.itemCount < 50)
+  ) {
     activeAccordion.value = Object.keys(selectedTab?.items || {});
-
-    // Вариант с по одной подкатегории
-    // Создаем массив для хранения ключей, которые удовлетворяют условию
-    // const keysToAdd = [];
-    //
-    // // Проверяем каждую категорию, чтобы определить, добавлять ли ее
-    // for (const [key, item] of Object.entries(selectedTab?.items || {})) {
-    //   if (item.count <= 50) {
-    //     keysToAdd.push(key);
-    //   }
-    // }
-    //
-    // // Обновляем активный аккордеон только с подходящими ключами
-    // activeAccordion.value = keysToAdd;
   }
 };
 

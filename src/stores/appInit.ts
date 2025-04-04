@@ -19,20 +19,25 @@ export const useAppInitStore = defineStore("appInit", () => {
   const { getActiveInfo } = useActiveInfo();
   const { getActiveListBottle, getActiveListGlass } = useWineListStore();
 
+  const fetchData = async (id: number) => {
+    return Promise.all([
+      getActiveInfo(id),
+      getActiveListGlass(id),
+      getActiveListBottle(id),
+      fetchRegions(),
+      fetchGrapes(),
+      fetchCountries(),
+    ]);
+  };
+
   const initApp = async () => {
     // isLoad.value = true;
     try {
-      const [info] = await Promise.all([
-        getActiveInfo(+route.params.id),
-        getActiveListGlass(+route.params.id),
-        getActiveListBottle(+route.params.id),
-        fetchRegions(),
-        fetchGrapes(),
-        fetchCountries(),
-      ]);
+      const [info] = await fetchData(+route.params.id);
 
       if (!info) {
         window.location.replace("https://w-list.ru/");
+        return;
       }
     } catch (err) {
       handleError(err, toast);
