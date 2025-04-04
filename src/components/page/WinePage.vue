@@ -76,10 +76,12 @@ import { storeToRefs } from "pinia";
 import { useGrapeStore } from "@/stores/grapeStore.ts";
 import WineDataTable from "@/components/WineDataTable.vue";
 import AppTopbar from "@/components/AppTopbar.vue";
+import { useActiveInfo } from "@/stores/activeInfo.ts";
 
 const { getCountryNameById } = useCountryStore();
 const { getRegionNameById } = useRegionStore();
 const { getGrapeNameById } = useGrapeStore();
+const { info } = storeToRefs(useActiveInfo());
 const { activeWineListBottle, activeWineListGlass } =
   storeToRefs(useWineListStore());
 
@@ -150,20 +152,26 @@ const router = useRouter();
 const route = useRoute();
 
 const updateActiveAccordion = () => {
-  const selectedTab = tabContent.value[activeTab.value];
+  if (info.value && info.value.itemCount < 50) {
+    const selectedTab = tabContent.value[activeTab.value];
 
-  // Создаем массив для хранения ключей, которые удовлетворяют условию
-  const keysToAdd = [];
+    // Все
+    activeAccordion.value = Object.keys(selectedTab?.items || {});
 
-  // Проверяем каждую категорию, чтобы определить, добавлять ли ее
-  for (const [key, item] of Object.entries(selectedTab?.items || {})) {
-    if (item.count <= 50) {
-      keysToAdd.push(key);
-    }
+    // Вариант с по одной подкатегории
+    // Создаем массив для хранения ключей, которые удовлетворяют условию
+    // const keysToAdd = [];
+    //
+    // // Проверяем каждую категорию, чтобы определить, добавлять ли ее
+    // for (const [key, item] of Object.entries(selectedTab?.items || {})) {
+    //   if (item.count <= 50) {
+    //     keysToAdd.push(key);
+    //   }
+    // }
+    //
+    // // Обновляем активный аккордеон только с подходящими ключами
+    // activeAccordion.value = keysToAdd;
   }
-
-  // Обновляем активный аккордеон только с подходящими ключами
-  activeAccordion.value = keysToAdd;
 };
 
 watch(activeTab, () => {
