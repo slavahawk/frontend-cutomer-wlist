@@ -73,14 +73,12 @@ import {
 import { type WineListItem } from "wlist-types";
 
 import { storeToRefs } from "pinia";
-import { useGrapeStore } from "@/stores/grapeStore.ts";
 import WineDataTable from "@/components/WineDataTable.vue";
 import AppTopbar from "@/components/AppTopbar.vue";
 import { useActiveInfo } from "@/stores/activeInfo.ts";
 
 const { getCountryNameById } = useCountryStore();
 const { getRegionNameById } = useRegionStore();
-const { getGrapeNameById } = useGrapeStore();
 const { info } = storeToRefs(useActiveInfo());
 const { activeWineListBottle, activeWineListGlass } =
   storeToRefs(useWineListStore());
@@ -97,7 +95,7 @@ const namingFunctions = {
   [glassItemsName]: getCategoryLabelByValue,
   [categoryName]: getCategoryLabelByValue,
   [countryName]: (key: any) => getCountryNameById(+key),
-  [grapesName]: (key: any) => getGrapeNameById(+key),
+  [grapesName]: (key: any) => key,
   [regionName]: (key: any) => getRegionNameById(+key),
   [sugarTypename]: getSugarTypeLabelByValue,
   [colourName]: getColourLabelByValue,

@@ -47,7 +47,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
 import { type WineListItem } from "wlist-types";
 import { WinePriceBottle, WinePriceGlass } from "w-list-components";
 import { showVintage, vintage } from "w-list-utils";

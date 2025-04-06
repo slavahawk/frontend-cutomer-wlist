@@ -15,23 +15,23 @@
       :virtual="true"
     >
       <swiper-slide
-        v-for="(wine, index) in selectedWines"
+        v-for="(wine, index) in wineDetails"
         :key="wine.id"
         :virtual-index="index"
       >
         <WineCard
           :img="imgSelect(wine.wine)"
           :name="wine.wine.name"
-          :country="countryNames[wine.wine.countryId]"
-          :region="regionNames[wine.wine.regionId]"
-          :grapes="getGrapesNameById(wine.wine.grapeData)"
+          :country="wine.countryName"
+          :region="wine.regionName"
+          :grapes="wine.grapeName"
           :interestingFacts="wine.wine.interestingFacts"
           :vintage="vintage(wine.wine.vintage)"
-          :category="getCategoryLabelByValue(wine.wine.category)"
+          :category="wine.categoryLabel"
           :category-id="wine.wine.category"
-          :colour="getColourLabelByValue(wine.wine.colour)"
+          :colour="wine.colourLabel"
           :alcoholByVolume="wine.wine.alcoholByVolume"
-          :sugarType="getSugarTypeLabelByValue(wine.wine.sugarType)"
+          :sugarType="wine.sugarTypeLabel"
           :organoleptic="wine.wine.organoleptic"
         >
           <p class="mb-4 flex gap-x-2 gap-y-4 items-center flex-wrap">
@@ -87,8 +87,9 @@ const props = defineProps<{
 }>();
 
 // Helper function to get img based on screen size
+const isLargeScreen = computed(() => window.innerWidth >= 568);
 const imgSelect = (wine: Wine) =>
-  window.innerWidth >= 768 ? wine.originalImagePath : wine.mediumImagePath;
+  isLargeScreen.value ? wine.originalImagePath : wine.mediumImagePath;
 
 // Computed properties for wine information
 const countryNames = computed(() => {
@@ -97,6 +98,18 @@ const countryNames = computed(() => {
 
 const regionNames = computed(() => {
   return getNamesById(props.selectedWines, getRegionNameById, "regionId");
+});
+
+const wineDetails = computed(() => {
+  return props.selectedWines.map((wine) => ({
+    ...wine,
+    grapeName: getGrapesNameById(wine.wine.grapeData),
+    categoryLabel: getCategoryLabelByValue(wine.wine.category),
+    colourLabel: getColourLabelByValue(wine.wine.colour),
+    sugarTypeLabel: getSugarTypeLabelByValue(wine.wine.sugarType),
+    countryName: countryNames.value[wine.wine.countryId],
+    regionName: regionNames.value[wine.wine.regionId],
+  }));
 });
 
 // Helper function to generate names by IDs

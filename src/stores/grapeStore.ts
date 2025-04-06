@@ -29,11 +29,6 @@ export const useGrapeStore = defineStore("grape", () => {
       .filter((name) => name !== null);
   };
 
-  const getGrapeNameById = (grapeId: number): string => {
-    const grape = grapes.value.find((g: Grape) => g.id === grapeId);
-    return grape?.name || "";
-  };
-
   const fetchGrapes = async () => {
     loading.value = true;
 
@@ -58,6 +53,5 @@ export const useGrapeStore = defineStore("grape", () => {
     fetchGrapes,
     clearSelectedGrape,
     getGrapesNameById,
-    getGrapeNameById,
   };
 });
